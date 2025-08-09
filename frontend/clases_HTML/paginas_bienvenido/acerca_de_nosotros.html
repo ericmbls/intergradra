@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acerca de nosotros - Cuenta Clara</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+    <!-- CSS desde carpeta estática -->
+    <link rel="stylesheet" href="{% static 'clases_CSS/paginas_bienvenido/styleAcercaNosotros.css' %}">
+
+    <!-- Tema para móviles -->
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+    <header class="header">
+        <img src="{% static 'imagenes/logoSinFondoCC.jpeg' %}" alt="Logo de Cuenta Clara" class="logo">
+
+        <nav class="migas">
+            <a href="{% url 'bienvenida' %}">Inicio</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="titulo">Acerca de nosotros</h1>
+
+        <article class="card">
+            <section>
+                <p>
+                    Cuenta Clara es un sistema desarrollado por estudiantes de la Universidad Tecnológica de Tlaxcala (UTT) con el objetivo de modernizar y optimizar el proceso de cobro y control en el comedor universitario.
+                </p>
+                <p>
+                    Nuestro propósito es brindar una herramienta confiable, sencilla y eficiente que permita al personal del comedor llevar un control detallado de sus operaciones diarias, reducir errores manuales y mejorar la experiencia tanto para los empleados como para los usuarios del servicio.
+                </p>
+            </section>
+
+            <section>
+                <h2>Nuestra Misión</h2>
+                <p>
+                    Facilitar la administración de los recursos del comedor mediante una plataforma digital adaptada a sus necesidades reales.
+                </p>
+            </section>
+
+            <section>
+                <h2>¿Quiénes somos?</h2>
+                <p>
+                    Un equipo de desarrollo comprometido con la mejora tecnológica de nuestra institución, aplicando nuestros conocimientos en programación, diseño de bases de datos y experiencia de usuario para resolver problemas concretos en nuestro entorno.
+                </p>
+            </section>
+        </article>
+    </main>
+</body>
+</html>

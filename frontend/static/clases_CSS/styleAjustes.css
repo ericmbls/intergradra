@@ -1,0 +1,351 @@
+/* Variables CSS para fácil personalización */
+:root {
+    /* Colores */
+    --main-bg: #f5f5f5;
+    --hover-bg: #607B92FF;
+    --text-color: #2c3e50;
+    --content-bg: #f5f5f5;
+    --azul-oscuro: #043A5B;
+    --azul-claro: #3498db;
+    --verde: #28a745;
+    --rojo: #ff6b6b;
+    
+    /* Dimensiones */
+    --sidebar-expanded: 250px;
+    --sidebar-collapsed: 80px;
+    --right-panel-width: 260px;
+    --icon-size: 28px;
+    
+    /* Espaciados */
+    --spacing-sm: 10px;
+    --spacing-md: 15px;
+    --spacing-lg: 20px;
+    
+    /* Transiciones */
+    --transition-speed: 0.3s;
+}
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Cabin', sans-serif;
+    background-color: var(--content-bg);
+    min-height: 100vh;
+    color: var(--text-color);
+    transition: margin-left var(--transition-speed);
+}
+
+/* ------------------------- */
+/* ESTILOS DEL MENÚ LATERAL */
+/* ------------------------- */
+
+.menu-toggle { 
+    display: none; 
+}
+
+.menu-button {
+    position: fixed;
+    top: var(--spacing-lg);
+    left: var(--spacing-sm);
+    font-size: var(--icon-size);
+    cursor: pointer;
+    z-index: 1000;
+    background: var(--main-bg);
+    color: var(--text-color);
+    padding: var(--spacing-sm);
+    border-radius: 10%;
+    transition: var(--transition-speed);
+}
+
+.menu-button:hover {
+    background: var(--hover-bg);
+    color: white;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: var(--sidebar-expanded);
+    background-color: var(--main-bg);
+    transition: width var(--transition-speed);
+    padding-top: 80px;
+    z-index: 999;
+    overflow: hidden;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.menu-toggle:not(:checked) ~ .sidebar {
+    width: var(--sidebar-collapsed);
+}
+
+.menu-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-item-first, 
+.menu-item {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.menu-link {
+    display: flex !important;
+    align-items: center;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 18px 25px !important;
+    background: none !important;
+    border: none !important;
+    color: var(--text-color) !important;
+    text-decoration: none !important;
+    font-size: 1rem !important;
+    cursor: pointer !important;
+    text-align: left !important;
+    transition: var(--transition-speed) !important;
+    font-family: inherit !important;
+}
+
+.menu-item-first .menu-link {
+    box-shadow: 0px -2px 5px rgba(0,0,0,0.1), 0px 2px 5px rgba(0,0,0,0.1);
+}
+
+.menu-item .menu-link {
+    box-shadow: 0px 5px 4px rgba(0,0,0,0.1);
+}
+
+.menu-link:hover {
+    background-color: var(--hover-bg) !important;
+    color: white !important;
+}
+
+.menu-icon, .fallback-icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    margin-right: 18px;
+    object-fit: contain;
+}
+
+.menu-label {
+    transition: opacity var(--transition-speed), visibility var(--transition-speed);
+    opacity: 1;
+    visibility: visible;
+    white-space: nowrap;
+}
+
+.menu-toggle:not(:checked) ~ .sidebar .menu-label {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* ------------------------- */
+/* CONTENIDO PRINCIPAL */
+/* ------------------------- */
+
+.content {
+    margin-left: var(--sidebar-expanded);
+    margin-right: var(--right-panel-width);
+    padding: var(--spacing-lg);
+    transition: margin-left var(--transition-speed);
+}
+
+.menu-toggle:not(:checked) ~ .content {
+    margin-left: var(--sidebar-collapsed);
+}
+
+.title-card {
+    width: 100%;
+    padding: var(--spacing-md);
+    background-color: var(--azul-oscuro);
+    border-radius: 5px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+h1, h2 {
+    color: white;
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+/* ------------------------- */
+/* PERFIL DE USUARIO */
+/* ------------------------- */
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    margin-bottom: 30px;
+    padding: var(--spacing-md);
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.profile-image {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border: 2px solid var(--azul-oscuro);
+    border-radius: 50%;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin: 0 0 var(--spacing-sm) 0;
+    font-weight: 600;
+}
+
+.user-email, .user-role {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin: 3px 0;
+}
+
+.user-role {
+    font-style: italic;
+    color: var(--hover-bg);
+}
+
+/* ------------------------- */
+/* BOTONES DE AJUSTES */
+/* ------------------------- */
+
+.settings-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    width: 100%;
+    max-width: 400px;
+}
+
+.settings-btn {
+    font-weight: bold;
+    width: 100%;
+    background-color: var(--hover-bg);
+    color: white;
+    border: none;
+    padding: var(--spacing-md);
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-family: 'Cabin', sans-serif;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+}
+
+.settings-btn:hover {
+    background-color: var(--azul-oscuro);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+}
+
+/* ------------------------- */
+/* PANEL DERECHO */
+/* ------------------------- */
+
+.right-panel {
+    width: var(--right-panel-width);
+    background-color: var(--main-bg);
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    border-left: 1px solid #ddd;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.right-panel-content {
+    padding: var(--spacing-lg);
+    height: 100%;
+    overflow-y: auto;
+}
+
+.right-panel-content p {
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.5;
+    color: var(--text-color);
+}
+
+/* ------------------------- */
+/* RESPONSIVE DESIGN */
+/* ------------------------- */
+
+@media (max-width: 1024px) {
+    .right-panel {
+        width: 240px;
+    }
+    
+    .content {
+        margin-right: 240px;
+    }
+}
+
+@media (max-width: 768px) {
+    .content {
+        margin-right: 0;
+    }
+
+    .right-panel {
+        width: 100%;
+        position: relative;
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+        height: auto;
+    }
+
+    .user-profile {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .settings-links {
+        max-width: 100%;
+    }
+
+    .menu-toggle:checked ~ .content {
+        margin-left: 0;
+        filter: brightness(0.7);
+        pointer-events: none;
+    }
+    
+    .menu-button {
+        z-index: 1001;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --sidebar-expanded: 220px;
+        --sidebar-collapsed: 70px;
+    }
+    
+    .user-name {
+        font-size: 1.3rem;
+    }
+    
+    .user-email, .user-role {
+        font-size: 0.9rem;
+    }
+    
+    .settings-btn {
+        padding: var(--spacing-sm);
+    }
+}

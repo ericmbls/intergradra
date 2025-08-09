@@ -1,0 +1,193 @@
+/* ========== ESTILOS GENERALES ========== */
+:root {
+    --primary-color: #607B92FF;
+    --primary-hover: #043A5BFF;
+    --text-color: #333;
+    --light-text: #565D6D;
+    --border-color: #e0e3e7;
+    --card-bg: #f8f9fa;
+    --white: #ffffff;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow-lg: 0 5px 15px rgba(0,0,0,0.05);
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Cabin', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+/* ========== HEADER ========== */
+header {
+    position: relative;
+    padding: 20px 0;
+}
+
+.logo {
+    position: absolute;
+    top: 30px;
+    left: 60px;
+    width: 150px;
+    height: auto;
+}
+
+.migas {
+    position: fixed;
+    top: 20px;
+    right: 60px;
+    font-family: 'Cabin', sans-serif;
+    font-size: 16px;
+    color: #2A2F8C;
+    background: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* ========== MAIN LAYOUT ========== */
+main {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 80px auto 0;
+}
+
+/* ========== COMPONENTES COMUNES ========== */
+.card, .signup-container {
+    flex: 1;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+    background:linear-gradient(180deg, #FAFAFBFF 0%, #DEE1E6FF 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #dbdee5;
+}
+
+.card {
+    background:linear-gradient(180deg, #FAFAFBFF 0%, #DEE1E6FF 100%);
+}
+
+/* ========== FORMULARIO ========== */
+.signup-form {
+    padding: 40px;
+}
+
+.form-title {
+    
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--light-text);
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    font-family: 'Cabin', sans-serif;
+    transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(42, 47, 140, 0.1);
+}
+
+.btn {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--light-text);
+}
+
+.login-link a {
+    color: #4285f4;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 900px) {
+    main {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 120px;
+}
+
+.card, .signup-container {
+    width: 100%;
+}
+
+.logo {
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+}
+
+.migas {
+    top: 70px;
+    right: 50%;
+    transform: translateX(50%);
+}
+}
+
+@media (max-width: 480px) {
+main {
+    padding: 1rem;
+}
+
+.signup-form, .card {
+    padding: 1.5rem;
+}
+
+.form-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+}

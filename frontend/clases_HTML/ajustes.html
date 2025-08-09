@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Fuente -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+    <!-- CSS local con ruta correcta -->
+    <link rel="stylesheet" href="{% static 'clases_CSS/styleAjustes.css' %}">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <title>Ajustes - Cuenta Clara</title>
+</head>
+<body>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    
+    <label for="menu-toggle" class="menu-button">
+        <i class="fas fa-bars"></i>
+    </label>
+
+    <!-- Menú lateral -->
+    <nav class="sidebar">
+        <ul class="menu-list">
+            <li class="menu-item-first">
+                <button onclick="location.href='{% url 'menu_comida' %}'" class="menu-link">
+                    <i class="fas fa-utensils fallback-icon"></i>
+                    <span class="menu-label">Menú</span>
+                </button>
+            </li>
+            <li class="menu-item">
+                <button onclick="location.href='{% url 'mesas' %}'" class="menu-link">
+                    <i class="fas fa-chair fallback-icon"></i>
+                    <span class="menu-label">Mesas</span>
+                </button>
+            </li>
+            <li class="menu-item">
+                <button onclick="location.href='{% url 'cuentas' %}'" class="menu-link">
+                    <i class="fas fa-receipt fallback-icon"></i>
+                    <span class="menu-label">Cuentas</span>
+                </button>
+            </li>
+            <li class="menu-item">
+                <button onclick="location.href='{% url 'corte' %}'" class="menu-link">
+                    <i class="fas fa-cut fallback-icon"></i>
+                    <span class="menu-label">Corte</span>
+                </button>
+            </li>
+            <li class="menu-item">
+                <button onclick="location.href='{% url 'ajustes' %}'" class="menu-link">
+                    <i class="fas fa-cog fallback-icon"></i>
+                    <span class="menu-label">Ajustes</span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Contenido -->
+    <main class="content">
+        <div class="title-card">
+            <h1>Ajustes</h1>
+        </div>
+
+        <div class="user-profile">
+            <img src="{% static 'images/user_placeholder.png' %}" alt="Perfil de {{ user.username }}" class="profile-image">
+            <div class="user-info">
+                <h2 class="user-name">{{ user.first_name }} {{ user.last_name }}</h2>
+                <p class="user-email">{{ user.email }}</p>
+                <p class="user-role">{{ user.role|default:"Administrador" }}</p>
+            </div>
+        </div>
+
+        <div class="settings-links">
+            <button onclick="location.href='{% url 'editar_menu' %}'" class="settings-btn">Editar menú</button>
+            <button onclick="location.href='{% url 'editar_mesas' %}'" class="settings-btn">Editar mesas</button>
+            <button onclick="location.href='{% url 'centro_de_usuarios' %}'" class="settings-btn">Centro de usuarios</button>
+
+        </div>
+    </main>
+
+    <!-- Panel derecho -->
+    <div class="right-panel">
+        <div class="right-panel-content">
+            <div class="title-card">
+                <h2>Información</h2>
+            </div>
+            <ul>
+                <li>Modificar el menú.</li>
+                <li>Organizar las mesas.</li>
+                <li>Administrar perfiles de usuario.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

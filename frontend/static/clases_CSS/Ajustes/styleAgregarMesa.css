@@ -1,0 +1,207 @@
+body {
+        font-family: Cabin, sans-serif;
+        background: #f5f5f5;
+        margin: 0;
+        padding: 20px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+}
+
+.title {
+    
+    font-family: 'Cabin', sans-serif;
+    text-align: center;
+    width: 50%;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #043A5B;
+    align-items: center;
+    margin: auto;
+    margin-bottom: 30px;
+    margin-top: -20px;
+}
+
+.box-card {
+    min-width: 50vw;
+    min-height: auto;
+    border-radius: 10px;
+    padding: 50px;
+    border-color: #4d6375;
+    box-shadow: 0px 4px 9px #171a1f1C, 0px 0px 2px #171a1f1F;
+    border: 1px solid #dbdee5;
+}
+
+.card-input {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 96.7%;                       /* Ancho completo */
+    padding: 0.8rem;                   /* Espaciado interno */
+    border: 1px solid #e2e8f0;         /* Borde sutil */
+    border-radius: 6px;                /* Bordes redondeados */
+    font-size: 1rem;                   /* Tamaño de fuente */
+}
+
+.card-input:focus {
+     outline: none;                     /* Elimina contorno por defecto */
+    border-color: #043A5BFF;             /* Borde azul */
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+/* Contenedor del formulario */
+.form-container {
+    background: white;                 /* Fondo blanco */
+    border-radius: 10px;               /* Bordes redondeados */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra suave */
+    width: 90%;                       /* Ancho relativo */
+    max-width: 500px;                  /* Ancho máximo */
+    padding: 2rem;                     /* Espaciado interno */
+}
+
+/* Estilo del título */
+h2 {
+    font-size: 32px;
+    color: white;                   /* Color de texto oscuro */
+    text-align: center;                /* Centrado del texto */
+    margin-bottom: 1.5rem;             /* Espaciado inferior */
+}
+
+/* 
+ * BOTÓN DE ENVÍO 
+ * Estilos para el botón de submit
+ */
+.botones-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.guardar-btn, .cancelar-btn {
+    flex: 1; /* Ocupan el mismo espacio */
+    padding: 0.8rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: center;
+}
+
+.guardar-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+}
+
+.guardar-btn:hover {
+    background-color: #59bb70;
+}
+
+.cancelar-btn {
+    background-color: #dc3545; /* Rojo para cancelar */
+    color: white;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cancelar-btn:hover {
+    background-color: #bb2d3b;
+}
+
+/* Checkbox invisible para controlar la visibilidad del mensaje ---------------------------------------*/
+.mensaje-checkbox {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+/* Mensaje de confirmación (oculto por defecto) */
+.mensaje-confirmacion {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Mostrar mensaje cuando el checkbox está activado */
+.mensaje-checkbox:checked ~ .mensaje-confirmacion {
+    display: flex;
+}
+
+/* Contenido del mensaje de confirmación */
+.mensaje-contenido {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    max-width: 80%;
+}
+
+/* Texto del mensaje de confirmación */
+.mensaje-contenido p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: black;
+}
+
+/* Enlace con estilo de botón */
+.ok-btm {
+    /* Mantenemos los mismos estilos visuales del botón */
+    background-color: #607B92FF;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    
+    /* Propiedades específicas para enlaces */
+    display: inline-block;  /* Permite padding y dimensiones como un botón */
+    text-decoration: none; /* Elimina el subrayado típico de los enlaces */
+    text-align: center;    /* Centra el texto como un botón */
+    
+    /* Transición suave */
+    transition: background-color 0.2s ease;
+}
+
+/* Efecto hover (igual que el botón) */
+.ok-btm:hover {
+    background-color: #043A5BFF;      /* Cambia el fondo al azul oscuro */
+    color: white;                     /* Mantiene el texto blanco */
+    text-decoration: none;            /* Previene subrayado en hover */
+}
+
+/* 
+ * Diseño responsivo para pantallas pequeñas
+ * Ajusta el tamaño y espaciado de los elementos principales
+ */
+@media (max-width: 768px) {
+    .box-card {
+        min-width: 80vw;              /* El ancho mínimo de la tarjeta aumenta */
+        padding: 30px;                /* Menos padding para pantallas pequeñas */
+    }
+    
+    .title {
+        width: 80%;                   /* El título ocupa más ancho */
+    }
+    
+    .colores-disponibles div {
+        flex-wrap: wrap;              /* Los colores se acomodan en varias líneas */
+        gap: 10px;                    /* Espacio entre colores */
+    }
+    
+    .mensaje-contenido {
+        padding: 20px;                /* Menos padding en el mensaje */
+        max-width: 90%;               /* El mensaje puede ser más ancho */
+    }
+}

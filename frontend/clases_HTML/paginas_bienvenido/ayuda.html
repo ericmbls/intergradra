@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayuda - Cuenta Clara</title>
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{% static 'paginas_bienvenido/styleAyuda.css' %}">
+</head>
+<body>
+
+    <header class="header">
+        <img src="{% static 'logoSinFondoCC.jpeg' %}" alt="Logo de Cuenta Clara" class="logo">
+        <a href="{% url 'bienvenida' %}" class="migas">Inicio</a>
+    </header>
+
+    <h1 class="titulo">Ayuda</h1>
+
+    <div class="card">
+        <section>
+            <h2>¿Tienes problemas para usar el sistema?</h2>
+            <p>Aquí encontrarás respuestas a las preguntas más comunes:</p>
+        </section>
+
+        <section>
+            <h2>1. ¿Cómo inicio sesión?</h2>
+            <p>Ingresa tu nombre de usuario y contraseña proporcionados por el administrador del establecimiento.</p>
+        </section>
+
+        <section>
+            <h2>2. Olvidé mi contraseña, ¿qué hago?</h2>
+            <p>Contacta al administrador del sistema para restablecerla. Por seguridad, no se puede recuperar directamente desde la aplicación.</p>
+        </section>
+
+        <section>
+            <h2>3. ¿Cómo registro una venta?</h2>
+            <p>Ve a la sección "Menú", selecciona los productos comprados y haz clic en "Confirmar".</p>
+        </section>
+
+        <section>
+            <h2>4. ¿Puedo modificar un producto o precio?</h2>
+            <p>Sólo los usuarios con rol de 'Administrador' tienen permisos para modificar productos.</p>
+        </section>
+    </div>
+
+</body>
+</html>

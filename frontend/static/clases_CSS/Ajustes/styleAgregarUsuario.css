@@ -1,0 +1,325 @@
+:root {
+    --primary-color: #043A5B;
+    --secondary-color: #607B92;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --light-gray: #f5f5f5;
+    --border-color: #e2e8f0;
+    --text-color: #333;
+    --text-light: #666;
+    --white: #ffffff;
+    --placeholder-color: #a0aec0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Cabin', sans-serif;
+    background-color: var(--light-gray);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+.title {
+    font-family: 'Cabin', sans-serif;
+    text-align: center;
+    width: 50%;
+    padding: 12px;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    margin: 0 auto 30px;
+    margin-top: -20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.box-card {
+    width: 100%;
+    max-width: 600px;
+    min-height: auto;
+    border-radius: 10px;
+    padding: 50px;
+    background-color: var(--white);
+    box-shadow: 0px 4px 9px #171a1f1C, 0px 0px 2px #171a1f1F;
+    border: 1px solid var(--border-color);
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin: 20px 0;
+    transition: all 0.3s ease-out;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    font-family: 'Cabin', sans-serif;
+    background-color: var(--white);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(4, 58, 91, 0.2);
+}
+
+.form-input::placeholder {
+    color: var(--placeholder-color);
+    font-style: normal;
+    opacity: 0.8;
+    font-size: 0.9rem;
+}
+
+.form-input:focus::placeholder {
+    opacity: 0.5;
+}
+
+.foto-section {
+    margin: 25px 0;
+    padding-top: 15px;
+    border-top: 1px dashed var(--border-color);
+}
+
+.foto-section p {
+    margin-bottom: 10px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.file-input-container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.file-input-label {
+    display: inline-block;
+    padding: 12px;
+    background-color: var(--secondary-color);
+    color: var(--white);
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.file-input-label:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+.file-input {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.file-input-text {
+    font-size: 1rem;
+    display: inline-block;
+}
+
+.file-name {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    padding-left: 5px;
+    font-style:normal;
+}
+
+.password-hint,
+.file-hint {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 6px;
+    padding-left: 2px;
+}
+
+.botones-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 2.5rem;
+}
+
+.guardar-btn, .cancelar-btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    font-family: 'Cabin', sans-serif;
+    font-weight: 500;
+    border: none;
+}
+
+.guardar-btn {
+    background-color: var(--success-color);
+    color: var(--white);
+}
+
+.guardar-btn:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.cancelar-btn {
+    background-color: var(--danger-color);
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cancelar-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.mensaje-checkbox {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+.mensaje-confirmacion {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.mensaje-checkbox:checked ~ .mensaje-confirmacion {
+    display: flex;
+}
+
+.mensaje-contenido {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    max-width: 90%;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.mensaje-contenido p {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.ok-btm {
+    background-color: var(--secondary-color);
+    color: var(--white);
+    border: none;
+    padding: 12px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.2s ease;
+    font-family: 'Cabin', sans-serif;
+    font-weight: 500;
+}
+
+.ok-btm:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .box-card {
+        padding: 30px;
+        min-width: 90vw;
+    }
+    
+    .title {
+        width: 80%;
+        font-size: 1.1rem;
+        padding: 10px;
+    }
+    
+    .botones-container {
+        flex-direction: column;
+    }
+    
+    .mensaje-contenido {
+        padding: 25px;
+        max-width: 95%;
+    }
+    
+    .form-input {
+        padding: 10px 12px;
+    }
+    
+    .guardar-btn, .cancelar-btn {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 15px;
+    }
+    
+    .box-card {
+        padding: 25px;
+    }
+    
+    .form-group {
+        margin: 15px 0;
+    }
+}
+.no-permiso {
+    text-align: center;
+    color: #c0392b;
+    font-weight: bold;
+    margin-top: 2rem;
+}

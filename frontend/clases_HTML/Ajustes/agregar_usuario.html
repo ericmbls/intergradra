@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Usuario - Cuenta Clara</title>
+
+    <!-- Fuente del proyecto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link 
+        href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" 
+        rel="stylesheet"
+    >
+
+    <!-- CSS específico -->
+    <link rel="stylesheet" href="{% static 'clases_CSS/Ajustes/styleAgregarUsuario.css' %}">
+</head>
+
+<body>
+    <div class="box-card">
+        <div class="title">
+            <h2>Agregar usuario</h2>
+        </div>
+
+        {% if request.user.perfilusuario and request.user.perfilusuario.role == 'admin' %}
+        <!-- Formulario Django -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Nombre de usuario -->
+            <div class="form-group">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+
+            <!-- Correo electrónico -->
+            <div class="form-group">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+            </div>
+
+            <!-- Contraseña -->
+            <div class="form-group">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+                <div class="password-hint">La contraseña debe contener al menos 8 caracteres</div>
+            </div>
+
+            <!-- Confirmar contraseña -->
+            <div class="form-group">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+            </div>
+
+            <!-- Rol (solo admin) -->
+            <div class="form-group">
+                {{ form.role.label_tag }}
+                {{ form.role }}
+            </div>
+
+            <!-- Foto de usuario -->
+            <div class="foto-section">
+                <p>Sube la foto del usuario:</p>
+                <div class="file-input-container">
+                    {{ form.foto }}
+                    <span class="file-name" id="file-name">No se ha seleccionado ningún archivo</span>
+                </div>
+                <div class="file-hint">Formatos aceptados: JPG, PNG (Máx. 2MB)</div>
+            </div>
+
+            <!-- Botones -->
+            <div class="botones-container">
+                <button type="submit" class="guardar-btn">Guardar</button>
+                <a href="{% url 'centro_de_usuarios' %}" class="guardar-btn cancelar-btn">Cancelar</a>
+            </div>
+        </form>
+
+        {% else %}
+        <!-- Mensaje si no tiene permisos -->
+        <p class="no-permiso">⛔ No tienes permisos para agregar usuarios.</p>
+        <div class="botones-container">
+            <a href="{% url 'menu' %}" class="guardar-btn cancelar-btn">Volver al menú</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Mensaje de confirmación (opcional) -->
+    <input type="checkbox" id="mostrar-mensaje" class="mensaje-checkbox">
+    <div class="mensaje-confirmacion">
+        <div class="mensaje-contenido">
+            <p>Datos guardados correctamente</p>
+            <a href="#" class="ok-btm">Ok</a>
+        </div>
+    </div>
+</body>
+</html>

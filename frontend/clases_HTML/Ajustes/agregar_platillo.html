@@ -1,0 +1,119 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agregar Platillo - Cuenta Clara</title>
+
+  <!-- Fuente principal -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Estilos locales -->
+  <link
+    rel="stylesheet"
+    href="{% static 'clases_CSS/Ajustes/styleAgregarPlatillo.css' %}"
+  >
+
+  <!-- Iconos de respaldo -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  >
+</head>
+<body>
+  <div class="box-card">
+    <div class="title">
+      <h2>Agregar un platillo</h2>
+    </div>
+
+    <form
+      method="POST"
+      enctype="multipart/form-data"
+      class="add-platillo-form"
+    >
+      {% csrf_token %}
+
+      <div class="card">
+        <label for="platillo-nombre">Nombre del Platillo</label>
+        <input
+          type="text"
+          name="nombre"
+          id="platillo-nombre"
+          class="card-input"
+          placeholder="Nombre del Platillo"
+          required
+        >
+
+        <label for="platillo-precio">Precio del Platillo</label>
+        <input
+          type="number"
+          name="precio"
+          id="platillo-precio"
+          class="card-input"
+          placeholder="Precio del Platillo"
+          step="0.01"
+          required
+        >
+
+        <p>Agrega los ingredientes (opcionales):</p>
+        <!-- Usamos el mismo nombre para poder hacer request.POST.getlist('ingredientes') -->
+        {% for i in "123456789" %}
+          <div class="form-group">
+            <input
+              type="text"
+              name="ingredientes"
+              class="form-input"
+              placeholder="Ingrediente {{ forloop.counter }}"
+            >
+          </div>
+        {% endfor %}
+
+        <div class="foto-section">
+          <p>Selecciona una foto:</p>
+          <label for="platillo-foto" class="file-input-label">
+            <span class="file-input-text">Seleccionar archivo</span>
+            <input
+              type="file"
+              name="foto"
+              id="platillo-foto"
+              class="file-input"
+              accept="image/*"
+              onchange="
+                document.getElementById('file-name').textContent =
+                  this.files[0]?.name || 'No se ha seleccionado ningún archivo'
+              "
+            >
+          </label>
+          <span class="file-name" id="file-name">
+            No se ha seleccionado ningún archivo
+          </span>
+        </div>
+      </div>
+
+      <div class="botones-container">
+        <button type="submit" class="guardar-btn">Guardar</button>
+        <a href="{% url 'editar_menu' %}" class="guardar-btn cancelar-btn">
+          Cancelar
+        </a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Mensaje de confirmación (opcional: se activa con JS o un checkbox) -->
+  <!--
+  <input type="checkbox" id="mostrar-mensaje" class="mensaje-checkbox">
+  <div class="mensaje-confirmacion">
+    <div class="mensaje-contenido">
+      <p>Datos guardados.</p>
+      <a href="{% url 'editar_menu' %}" class="ok-btm">Ok</a>
+    </div>
+  </div>
+  -->
+</body>
+</html>

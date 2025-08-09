@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenido</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{% static 'clases_CSS/styleBienvenido.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+    <style>
+        .flash-messages {
+            margin: 1rem auto;
+            padding: 1rem;
+            max-width: 600px;
+            background-color: #e0f7fa;
+            border-left: 4px solid #00796b;
+            color: #004d40;
+            border-radius: 4px;
+            font-weight: 500;
+            text-align: center;
+            transition: opacity 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mensaje flash -->
+    {% if messages %}
+    <div class="flash-messages">
+        {% for message in messages %}
+        <div class="flash {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Encabezado -->
+    <div class="header">
+        <a href="{% url 'acerca_de_nosotros' %}" class="acerca">Acerca de nosotros</a>
+        <a href="{% url 'ayuda' %}" class="ayuda">Ayuda</a>
+        <a href="{% url 'politicas' %}" class="politicas">Políticas de privacidad</a>
+        <a href="{% url 'contacto' %}" class="contactanos">Contáctanos</a>
+    </div>
+
+    <!-- Logo -->
+    <div class="contenedorImagen">
+        <img src="{% static 'imagenes/logoSinFondoCC.jpeg' %}" alt="Logo de la empresa" class="logo">
+    </div>
+
+    <!-- Acciones -->
+    <div class="footer">
+        <a href="{% url 'login' %}" class="iniciar_sesion">Iniciar sesión</a>
+        <a href="{% url 'nuevo_usuario' %}" class="nuevo_usuario">Nuevo usuario</a>
+    </div>
+
+    <!-- Script para desvanecer mensajes -->
+    <script src="{% static 'js/desvanecerMensajes.js' %}"></script>
+</body>
+</html>

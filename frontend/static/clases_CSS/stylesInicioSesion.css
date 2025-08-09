@@ -1,0 +1,193 @@
+
+
+/* Estilos generales */
+body {
+    font-family: 'Cabin', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+}
+
+/* Contenedor principal */
+.login-container {
+    background:linear-gradient(180deg, #FAFAFBFF 0%, #DEE1E6FF 100%);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    border: 1px solid #dbdee5;
+}
+
+/* Logo provisional */
+.logo {
+    position: absolute; /* Posicionamiento preciso */
+    top: 30px;         /* Distancia desde arriba */
+    left: 60px;        /* Distancia desde la izquierda */
+    width: 150px;      /* Ancho ajustable */
+    height: auto;      /* Mantiene proporción */
+}
+
+.logo-circle {
+    width: 80px;
+    height: 80px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #666;
+    margin: 0 auto;
+}
+
+/* Título */
+h1 {
+    font-size: 24px;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+/* Formulario */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Contenedores de input */
+.input-container {
+    text-align: left;
+    position: relative;
+}
+
+.input-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.input-container input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.input-container input:focus {
+    outline: none;
+    border-color: #4d6375;
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+/* Enlace de contraseña olvidada */
+.forgot-password {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #4285f4;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Checkbox "Recuérdame" */
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-top: -10px;
+}
+
+.remember-me input {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.remember-me label {
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Botón de inicio de sesión */
+.login-button {
+    background-color: #607B92FF;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.login-button:hover {
+    background-color: #043A5BFF;
+}
+
+/* Enlace para crear cuenta */
+.signup-link {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.signup-link a {
+    color: #4285f4;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+.migas {
+    position: fixed;
+    top: 20px;
+    right: 60px;
+    font-family: 'Cabin', sans-serif;
+    font-size: 16px;
+    color: #2A2F8C;
+    background: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+/* 🔴 Mensaje general de error */
+.form-error {
+    color: #d9534f;
+    background-color: #f9d6d5;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* 🔴 Contenedor con error */
+.input-container.error input {
+    border: 2px solid #d9534f;
+}
+
+/* 🔴 Mensaje de error por campo */
+.field-error {
+    color: #d9534f;
+    font-size: 13px;
+    margin-top: 6px;
+    display: block;
+}

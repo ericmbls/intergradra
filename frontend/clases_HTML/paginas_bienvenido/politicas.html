@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Políticas de privacidad - Cuenta Clara</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+    <!-- CSS estático -->
+    <link rel="stylesheet" href="{% static 'clases_CSS/paginas_bienvenido/stylePoliticasPrivacidad.css' %}">
+</head>
+
+<body>
+    <header class="header">
+        <!-- Imagen estática del logo -->
+        <img src="{% static 'imagenes/logoSinFondoCC.jpeg' %}" alt="Logo de Cuenta Clara" class="logo">
+
+        <nav class="migas">
+            <a href="{% url 'bienvenida' %}">Inicio</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="titulo">Políticas de privacidad</h1>
+
+        <article class="card">
+            <section>
+                <h2>¿Qué datos recopilamos?</h2>
+                <p>Recopilamos únicamente la información necesaria para operar el sistema:</p>
+                <ul>
+                    <li>Datos personales de los usuarios (nombre, usuario, contraseña)</li>
+                    <li>Historial de ventas, cortes de caja y movimientos registrados</li>
+                    <li>Información del dispositivo (opcional, solo en caso de soporte técnico)</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>¿Cómo usamos tus datos?</h2>
+                <p>Utilizamos los datos para:</p>
+                <ul>
+                    <li>Permitir el uso seguro del sistema</li>
+                    <li>Registrar y organizar la información de ventas</li>
+                    <li>Generar reportes administrativos</li>
+                    <li>Dar seguimiento técnico en caso de errores</li>
+                </ul>
+                <p><strong>Nunca vendemos ni compartimos tus datos con terceros.</strong></p>
+            </section>
+
+            <section>
+                <h2>¿Cómo protegemos tu información?</h2>
+                <p>Contamos con medidas básicas de seguridad:</p>
+                <ul>
+                    <li>Acceso por usuario y contraseña</li>
+                    <li>Encriptación de contraseñas</li>
+                    <li>Base de datos segura y controlada por el administrador</li>
+                    <li>Acceso restringido solo al personal autorizado</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Tus derechos como usuario</h2>
+                <p>Puedes solicitar:</p>
+                <ul>
+                    <li>Acceso a tus datos personales</li>
+                    <li>Corrección de información</li>
+                </ul>
+            </section>
+        </article>
+    </main>
+</body>
+</html>

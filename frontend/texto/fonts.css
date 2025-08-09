@@ -1,0 +1,22 @@
+@font-face{
+    font-family: "Cabin";
+    src: url("fonts/Cabin-Regular.ttf") format("truetype");
+    font-weight: 400;
+}
+@font-face{
+    font-family: "Cabin";
+    src: url("fonts/Cabin-Bold.ttf") format("truetype");
+    font-weight: 900;
+}
+@font-face{
+    font-family: "Cabin";
+    src: url("fonts/Cabin-BoldItalic.ttf") format("truetype");
+    font-weight: 900;
+    font-style: italic;
+}
+@font-face{
+    font-family: "Cabin";
+    src: url("fonts/Cabin-Medium.ttf") format("truetype");
+    font-weight: 100;
+    font-style: italic;
+}

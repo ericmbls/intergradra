@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro de Usuarios - Cuenta Clara</title>
+
+    <!-- Fuentes e iconos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'clases_CSS/Ajustes/styleCentroUsuarios.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Mensajes flash -->
+    {% if messages %}
+    <div class="flash-messages" aria-live="polite">
+        {% for message in messages %}
+        <div class="flash {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Menú lateral -->
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    <label for="menu-toggle" class="menu-button" aria-label="Abrir menú">
+        <i class="fas fa-bars"></i>
+    </label>
+
+    <nav class="sidebar" aria-label="Menú principal">
+        <ul class="menu-list">
+            <li class="menu-item">
+                <button onclick="window.location.href='{% url 'menu_comida' %}'" class="menu-link">
+                    <i class="fas fa-utensils"></i> <span class="menu-label">Menú</span>
+                </button>
+            </li>
+            <li class="menu-item">
+                <button onclick="window.location.href='{% url 'mesas' %}'" class="menu-link">
+                    <i class="fas fa-chair"></i> <span class="menu-label">Mesas</span>
+                </button>
+            </li>
+            <li class="menu-item">
+                <button onclick="window.location.href='{% url 'cuentas' %}'" class="menu-link">
+                    <i class="fas fa-receipt"></i> <span class="menu-label">Cuentas</span>
+                </button>
+            </li>
+            <li class="menu-item">
+                <button onclick="window.location.href='{% url 'corte' %}'" class="menu-link">
+                    <i class="fas fa-cut"></i> <span class="menu-label">Corte</span>
+                </button>
+            </li>
+            <li class="menu-item">
+                <button onclick="window.location.href='{% url 'ajustes' %}'" class="menu-link">
+                    <i class="fas fa-cog"></i> <span class="menu-label">Ajustes</span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main class="content">
+        <div class="title-card">
+            <h1>Centro de Usuarios</h1>
+        </div>
+
+        <!-- Filtro por rol -->
+        <form method="get" class="filtro-simple">
+            <label for="rol">Filtrar por rol:</label>
+            <select name="rol" id="rol" onchange="this.form.submit()">
+                <option value="">Todos</option>
+                <option value="admin" {% if rol_seleccionado == 'admin' %}selected{% endif %}>Administrador</option>
+                <option value="employee" {% if rol_seleccionado == 'employee' %}selected{% endif %}>Empleado</option>
+            </select>
+        </form>
+
+        {% if request.user.perfilusuario.role == 'admin' %}
+        <a class="add-item-btn floating-btn" href="{% url 'agregar_usuario' %}">
+            <i class="fas fa-plus"></i> Agregar usuario
+        </a>
+        {% endif %}
+
+        <div class="table">
+            <div class="table-container">
+                <table class="menu-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuario</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                            <th>Activo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in usuarios %}
+                        <tr>
+                            <td>{{ usuario.id }}</td>
+                            <td>{{ usuario.get_full_name|default:usuario.username }}</td>
+                            <td>
+                                {% if usuario.perfilusuario %}
+                                    {{ usuario.perfilusuario.get_role_display }}
+                                {% else %}
+                                    Sin rol
+                                {% endif %}
+                            </td>
+                            <td class="actions-cell">
+                                <button onclick="window.location.href='{% url 'editar_usuario' usuario.id %}'" class="action-btn edit-btn">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                                <button onclick="if(confirm('¿Seguro que deseas eliminar este usuario?')) { window.location.href='{% url 'eliminar_usuario' usuario.id %}'; }" class="action-btn delete-btn">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="active-checkbox" {% if usuario.is_active %}checked{% endif %} disabled>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" style="text-align:center;">No hay usuarios registrados</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

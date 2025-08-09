@@ -1,0 +1,332 @@
+/* Variables CSS para fácil personalización */
+:root {
+    /* Colores principales y de fondo */
+    --main-bg: #f5f5f5;
+    --hover-bg: #607B92FF;
+    --text-color: #2c3e50;
+    --content-bg: #f5f5f5;
+    
+    /* Dimensiones del sidebar y tamaño de iconos */
+    --sidebar-expanded: 200px;
+    --sidebar-collapsed: 70px;
+    --icon-size: 24px;
+    
+    /* Velocidad de transiciones */
+    --transition-speed: 0.3s;
+}
+
+/* Reset básico para quitar márgenes y paddings por defecto */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos generales del body */
+body {
+    font-family: 'Cabin', sans-serif;
+    background-color: var(--content-bg);
+    transition: margin-left var(--transition-speed);
+    min-height: 100vh;
+}
+
+/* Oculta el checkbox que controla el menú lateral */
+.menu-toggle {
+    display: none;
+}
+
+/* Botón del menú hamburguesa */
+.menu-button {
+    position: fixed;
+    top: 20px;
+    left: 10px;
+    font-size: var(--icon-size);
+    cursor: pointer;
+    z-index: 1000;
+    background: var(--main-bg);
+    color: var(--text-color);
+    padding: 10px;
+    border-radius: 10%;
+    transition: var(--transition-speed);
+}
+
+/* Efecto hover para el botón del menú */
+.menu-button:hover {
+    background: var(--hover-bg);
+}
+
+/* Menú lateral (sidebar) */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: var(--sidebar-expanded);
+    background-color: var(--main-bg);
+    transition: width var(--transition-speed);
+    padding-top: 80px;
+    z-index: 999;
+    overflow: hidden;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar contraído cuando el checkbox no está marcado */
+.menu-toggle:not(:checked) ~ .sidebar {
+    width: var(--sidebar-collapsed);
+}
+
+/* Lista de items del menú lateral */
+.menu-list {
+    list-style-type: none;
+}
+
+/* Estilos para cada item del menú */
+.menu-item {
+    padding: 18px 20px;
+    transition: var(--transition-speed);
+    white-space: nowrap;
+    margin-bottom: 5px;
+    box-shadow: 0px 5px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Efecto hover en los items del menú */
+.menu-item:hover {
+    background-color: var(--hover-bg);
+}
+
+/* Enlaces dentro del menú lateral */
+.menu-link {
+    display: flex;
+    align-items: center;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 16px;
+}
+
+/* Iconos del menú y fallback */
+.menu-icon, .fallback-icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    margin-right: 15px;
+    object-fit: contain;
+}
+
+/* Etiqueta de texto de los items del menú */
+.menu-label {
+    transition: 
+        opacity var(--transition-speed), 
+        visibility var(--transition-speed);
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Oculta el texto de los items cuando el menú está contraído */
+.menu-toggle:not(:checked) ~ .sidebar .menu-label {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Contenido principal de la página */
+.content {
+    margin-left: var(--sidebar-expanded);
+    padding: 20px;
+    transition: margin-left var(--transition-speed);
+}
+
+/* Ajusta el contenido cuando el menú está contraído */
+.menu-toggle:not(:checked) ~ .content {
+    margin-left: var(--sidebar-collapsed);
+}
+
+/* Estilos responsivos para pantallas pequeñas */
+@media (max-width: 768px) {
+    /* Ajusta el contenido cuando el menú está abierto */
+    .menu-toggle:checked ~ .content {
+        margin-left: var(--sidebar-collapsed);
+        margin-right: 250px; /* Mantén el mismo margen derecho */
+    }
+    /* Asegura que el botón esté sobre el menú */
+    .menu-button {
+        z-index: 1001;
+    }
+}
+
+/*--------------------------------------------------------------------------------------------- */
+
+/* Contenedor principal del contenido */
+.content {
+    margin-left: var(--sidebar-expanded);
+    margin-right: 0; /* Añade este margen derecho igual al ancho del panel */
+    padding: 20px;
+    transition: margin-left var(--transition-speed);
+}
+
+/* Tarjeta de título */
+.title-card {
+    font-family: 'Cabin', sans-serif;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #043A5B;
+    align-items: center;
+    margin: auto;
+    margin-bottom: 30px;
+}
+
+/* Título principal */
+h1 {
+    font-size: 32px;
+    color: white;                   /* Color de texto oscuro */
+    text-align: center;             /* Centrado del texto */
+}
+
+/* Estilos para la tabla principal */
+.table {
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+/* Botón flotante */
+.floating-btn {
+    color: white;
+    background-color: #28a745;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000; /* Asegura que esté por encima de todo */
+    padding: 15px 25px;
+    border-radius: 5px; /* Forma ovalada */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: none;
+    text-decoration: none; /* Elimina subrayado */
+}
+
+.floating-btn:hover {
+    background-color: #59bb70;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    color: white;
+    border: none;
+}
+
+
+
+/* Tabla del menú ------------------------ */
+.menu-table {
+    width: 100%;
+    border-collapse: collapse;
+    
+}
+
+/* Encabezados de la tabla */
+.menu-table th {
+    background-color: #043A5B;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    
+    
+}
+
+/* Celdas de la tabla */
+.menu-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+    
+}
+
+/* Quita el borde inferior a la última fila */
+.menu-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Efecto hover en las filas de la tabla */
+.menu-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Estilos para el checkbox -------------------------------- */
+.active-checkbox {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ddd;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    vertical-align: middle;
+}
+
+.active-checkbox:checked {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.active-checkbox:checked::after {
+    content: "✓";
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+}
+
+/* Estilo base (similar al botón original) */
+.edit-btn {
+    display: inline-block;
+    padding: 8px 10px;
+    background-color: #607B92;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+/* Efecto hover */
+.edit-btn:hover {
+    background-color: #043A5B;
+    color: white;
+    text-decoration: none;
+}
+
+/* Para asegurar que ocupe el mismo espacio que el botón */
+td .edit-btn {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Estilo para la lista de ingredientes ---------------------------------------------- */
+.ingredients-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ingredients-list li {
+    padding: 2px 0;
+    position: relative;
+    padding-left: 15px;
+}
+
+.ingredients-list li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #043A5B;
+}
