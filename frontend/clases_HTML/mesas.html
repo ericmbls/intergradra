@@ -2,49 +2,158 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesas - Cuenta Clara</title>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
-
-    <!-- Estilo personalizado -->
-    <link rel="stylesheet" href="{% static 'clases_CSS/styleMesas.css' %}">
-
-    <!-- Iconos de respaldo -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <title>Mesas - Cuenta Clara</title>
+  <!-- Fuentes y estilos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'clases_CSS/styleMesas.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <!-- Checkbox invisible para controlar el menú -->
-    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+  <!-- Menú hamburguesa -->
+  <input type="checkbox" id="menu-toggle" class="menu-toggle">
+  <label for="menu-toggle" class="menu-button" aria-label="Menú principal">
+    <i class="fas fa-bars"></i>
+  </label>
 
-    <!-- Botón hamburguesa -->
-    <label for="menu-toggle" class="menu-button">
-        <i class="fas fa-bars"></i>
-    </label>
+  <!-- Barra lateral -->
+  <nav class="sidebar" aria-label="Menú principal">
+    <ul class="menu-list">
+      <li class="menu-item-first">
+        <a href="{% url 'menu_comida' %}" class="menu-link">
+          <i class="fas fa-utensils fallback-icon"></i>
+          <span class="menu-label">Menú</span>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="{% url 'mesas' %}" class="menu-link">
+          <i class="fas fa-chair fallback-icon"></i>
+          <span class="menu-label">Mesas</span>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="{% url 'cuentas' %}" class="menu-link">
+          <i class="fas fa-receipt fallback-icon"></i>
+          <span class="menu-label">Cuentas</span>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="{% url 'corte' %}" class="menu-link">
+          <i class="fas fa-cut fallback-icon"></i>
+          <span class="menu-label">Corte</span>
+        </a>
+      </li>
+      {% if request.user.perfilusuario.role == 'admin' %}
+      <li class="menu-item">
+        <a href="{% url 'ajustes' %}" class="menu-link">
+          <i class="fas fa-cog fallback-icon"></i>
+          <span class="menu-label">Ajustes</span>
+        </a>
+      </li>
+      {% endif %}
+      <li class="menu-item">
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="menu-link logout-btn" onclick="return confirm('¿Seguro que deseas cerrar sesión?')">
+            <i class="fas fa-sign-out-alt fallback-icon"></i>
+            <span class="menu-label">Cerrar sesión</span>
+          </button>
+        </form>
+      </li>
+    </ul>
+  </nav>
 
-    <!-- Menú lateral -->
-    <nav class="sidebar">
-        <ul class="menu-list">
-            <li class="menu-item"><a href="{% url 'menu' %}" class="menu-link"><i class="fas fa-utensils fallback-icon"></i><span class="menu-label">Menú</span></a></li>
-            <li class="menu-item"><a href="{% url 'mesas' %}" class="menu-link"><i class="fas fa-chair fallback-icon"></i><span class="menu-label">Mesas</span></a></li>
-            <li class="menu-item"><a href="{% url 'cuentas' %}" class="menu-link"><i class="fas fa-receipt fallback-icon"></i><span class="menu-label">Cuentas</span></a></li>
-            <li class="menu-item"><a href="{% url 'corte' %}" class="menu-link"><i class="fas fa-cut fallback-icon"></i><span class="menu-label">Corte</span></a></li>
-            <li class="menu-item"><a href="{% url 'ajustes' %}" class="menu-link"><i class="fas fa-cog fallback-icon"></i><span class="menu-label">Ajustes</span></a></li>
-        </ul>
-    </nav>
+  <!-- Contenido principal -->
+  <main class="content">
+    <div class="title-card">
+      <h1>Mesas</h1>
+    </div>
 
-    <!-- Contenido principal -->
-    <main class="content">
-        <h1>Sistema de Restaurante</h1>
-        <p>Menú lateral contraíble con iconos personalizados.</p>
+    <div class="mesas-container">
+      {% for mesa in mesas %}
+      <label class="mesa-option">
+        <input type="radio" name="mesa-seleccionada" value="{{ mesa.id }}" class="mesa-input">
+        <div class="mesa-box" style="background-color: {{ mesa.color }}">
+          <i class="fas fa-chair mesa-icon"></i>
+          <span>Mesa {{ mesa.numero }}</span>
+        </div>
+      </label>
+      {% empty %}
+      <p class="no-mesas">No hay mesas registradas.</p>
+      {% endfor %}
+    </div>
+  </main>
 
-        <!-- Imagen desde carpeta 'imagenes' -->
-        <img src="{% static 'imagenes/logo.png' %}" alt="Logo del restaurante" class="logo">
-    </main>
+  <!-- Panel derecho -->
+  <aside class="right-panel">
+    <div class="right-panel-content">
+      <div class="title-card">
+        <h2>Órdenes activas</h2>
+      </div>
+
+      <div class="orden-container">
+        {% for orden in ordenes_activas %}
+        <div class="orden-card {% if orden.para_llevar %}para-llevar{% endif %}">
+          <h3>
+            {% if orden.para_llevar %}
+              Para Llevar
+            {% else %}
+              Mesa {{ orden.mesa.numero }}
+            {% endif %}
+          </h3>
+          {% for item in orden.items.all %}
+          <p>{{ item.cantidad }}x {{ item.producto.nombre }}</p>
+          {% endfor %}
+          <button class="eliminar-btn" data-orden-id="{{ orden.id }}" aria-label="Eliminar orden">✓</button>
+        </div>
+        {% empty %}
+        <p class="no-ordenes">No hay órdenes activas</p>
+        {% endfor %}
+      </div>
+
+      <div class="panel-footer">
+        <div class="mesas-actions">
+          <button type="button" class="action-btn" id="asignar-mesa-btn">
+            <i class="fas fa-utensils"></i> Asignar Mesa
+          </button>
+          <button type="button" class="action-btn" id="nueva-orden-btn">
+            <i class="fas fa-plus"></i> Nueva Orden
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Scripts -->
+  <script>
+    // Eliminar orden (simulado)
+    document.querySelectorAll('.eliminar-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const ordenId = this.dataset.ordenId;
+        if (confirm('¿Estás seguro de querer eliminar esta orden?')) {
+          this.closest('.orden-card').remove();
+        }
+      });
+    });
+
+    // Asignar mesa y redirigir al menú con el ID
+    document.getElementById('asignar-mesa-btn').addEventListener('click', function () {
+      const mesaSeleccionada = document.querySelector('input[name="mesa-seleccionada"]:checked');
+      if (mesaSeleccionada) {
+        window.location.href = `{% url 'menu_comida' %}?mesa=${mesaSeleccionada.value}`;
+      } else {
+        alert('Por favor selecciona una mesa primero');
+      }
+    });
+
+    // Nueva orden sin mesa asignada
+    document.getElementById('nueva-orden-btn').addEventListener('click', function () {
+      window.location.href = "{% url 'menu_comida' %}";
+    });
+  </script>
 </body>
 </html>

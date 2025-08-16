@@ -10,9 +10,6 @@ urlpatterns = [
 
 # Servir archivos estáticos y multimedia en modo desarrollo
 if settings.DEBUG:
-    # Archivos estáticos personalizados
-    for static_dir in settings.STATICFILES_DIRS:
-        urlpatterns += static(settings.STATIC_URL, document_root=static_dir)
-
-    # Archivos multimedia (fotos de usuario, etc.)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    

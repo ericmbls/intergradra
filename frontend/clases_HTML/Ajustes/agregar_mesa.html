@@ -1,75 +1,69 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Agregar mesa - Cuenta Clara</title>
-        <link rel="stylesheet" href="..\../clases_CSS/Ajustes/styleAgregarMesa.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet"> <!--Fuente del proyecto traída desde Google fonts-->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar mesa - Cuenta Clara</title>
+    <link rel="stylesheet" href="{% static 'clases_CSS/Ajustes/styleAgregarMesa.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+</head>
 
-    </head>
+<body>
+    <div class="box-card">
+        <div class="title">
+            <h2>Agregar mesa</h2> 
+        </div>
 
-    <body>
-        <div class="box-card">
-            <div class="title">
-                <h2>Agregar mesa</h2> 
-            </div>
-
+        <form method="POST" action="{% url 'agregar_mesa' %}">
+            {% csrf_token %}
             <div class="card">
-                <label for="mesa-número">Número de mesa: </label>
-                <input type="text" class="card-input" id="mesa-número" placeholder="Asigna un número" required>
+                <label for="mesa-número">Número de mesa:</label>
+                <input type="text" class="card-input" id="mesa-número" name="numero" placeholder="Asigna un número" required>
+                <input type="hidden" id="mesa-color" name="color">
                 <p>Elige el color de la mesa:</p>
             </div>
-        
-        <form>
 
-            <!-- Sección de los colores disponibles, le permitirán al usuario escoger entre 8 opciones -->
-            <!-- Botones que le permiten al usuario escoger entre 8 variedades de colores -->
-        <div class="color-box">
-            <div class="colores-disponibles">  
-            <div>      
-                <button title="Gris claro" style="background-color: #DEE1E6FF; width: 30px; height: 30px;" onclick="seleccionarColor('#DEE1E6FF')"></button>
-            
-                <button title="Salmón pastel" style="background-color: #E78A8AFF; width: 30px; height: 30px;" onclick="seleccionarColor('#E78A8AFF')"></button>
-            
-                <button title="Naranja pastel" style="background-color: #E7965CFF; width: 30px; height: 30px;" onclick="seleccionarColor('#E7965CFF')"></button>
-            
-                <button title="Amarillo pastel" style="background-color: #FFED66FF; width: 30px; height: 30px;" onclick="seleccionarColor('#FFED66FF')"></button>
+            <div class="color-box">
+                <div class="colores-disponibles">  
+                    <div>      
+                        <button type="button" title="Gris claro" style="background-color: #DEE1E6FF;" onclick="seleccionarColor('#DEE1E6FF')"></button>
+                        <button type="button" title="Salmón pastel" style="background-color: #E78A8AFF;" onclick="seleccionarColor('#E78A8AFF')"></button>
+                        <button type="button" title="Naranja pastel" style="background-color: #E7965CFF;" onclick="seleccionarColor('#E7965CFF')"></button>
+                        <button type="button" title="Amarillo pastel" style="background-color: #FFED66FF;" onclick="seleccionarColor('#FFED66FF')"></button>
+                    </div>
+
+                    <div>
+                        <button type="button" title="Verde pastel" style="background-color: #98E78AFF;" onclick="seleccionarColor('#98E78AFF')"></button>
+                        <button type="button" title="Morado pastel" style="background-color: #9E7CCFFF;" onclick="seleccionarColor('#9E7CCFFF')"></button>
+                        <button type="button" title="Bugambilia pastel" style="background-color: #D05392FF;" onclick="seleccionarColor('#D05392FF')"></button>
+                        <button type="button" title="Aqua pastel" style="background-color: #31A385FF;" onclick="seleccionarColor('#31A385FF')"></button>
+                    </div>
+                </div>
             </div>
 
-            <div>
-                <button title="Verde pastel" style="background-color: #98E78AFF; width: 30px; height: 30px;" onclick="seleccionarColor('#98E78AFF')"></button>
-            
-                <button title="Morado pastel" style="background-color: #9E7CCFFF; width: 30px; height: 30px;" onclick="seleccionarColor('#9E7CCFFF')"></button>
-
-                <button title="Bugambilia pastel" style="background-color: #D05392FF; width: 30px; height: 30px;" onclick="seleccionarColor('#D05392FF')"></button>
-            
-                <button title="Aqua pastel" style="background-color: #31A385FF; width: 30px; height: 30px;" onclick="seleccionarColor('#D05392FF')"></button>
+            <div class="botones-container">
+                <button type="submit" class="guardar-btn">Guardar</button>
+                <a href="{% url 'editar_mesas' %}" class="guardar-btn cancelar-btn">Cancelar</a>
             </div>
-            
-            </div>
-
-            <!-- Botón de envío del formulario -->
-        <div class="botones-container">
-            <label for="mostrar-mensaje" roll="button" class="guardar-btn">Guardar</label>  <!-- Checkbox que controla la visibilidad del mensaje de confirmación //copiar-->
-            <a href="editar_menu.html" class="guardar-btn cancelar-btn">Cancelar</a>
-        </div>
-
         </form>
 
-        <!-- Checkbox invisible para controlar la visibilidad del mensaje de confirmación -->
-    <input type="checkbox" id="mostrar-mensaje" class="mensaje-checkbox">
-
-    <!-- Mensaje de confirmación que aparece al guardar -->
-    <div class="mensaje-confirmacion">
-        <div class="mensaje-contenido">
-            <p>Datos guardados.</p>
-            <!-- El label actúa como botón OK para cerrar el mensaje -->
-            <a href="agregar_platillo.html" class="ok-btm">Ok</a>
+        {% if mensaje %}
+        <div class="mensaje-confirmacion">
+            <div class="mensaje-contenido">
+                <p>{{ mensaje }}</p>
+                <a href="{% url 'editar_mesas' %}" class="ok-btm">Ok</a>
+            </div>
         </div>
+        {% endif %}
     </div>
 
-    </body> 
+    <script>
+        function seleccionarColor(color) {
+            document.getElementById('mesa-color').value = color;
+        }
+    </script>
+</body>
 </html>

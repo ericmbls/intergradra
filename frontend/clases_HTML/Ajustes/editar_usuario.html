@@ -22,11 +22,11 @@
 
         <!-- Mensajes flash -->
         {% if messages %}
-        <div class="flash-messages">
-            {% for message in messages %}
-            <div class="flash {{ message.tags }}">{{ message }}</div>
-            {% endfor %}
-        </div>
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="flash {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
         {% endif %}
 
         <!-- Formulario conectado al backend -->
@@ -60,10 +60,10 @@
 
             <div class="foto-section">
                 <p>Foto actual del usuario:</p>
-                {% if usuario.perfilusuario.foto %}
+                {% if usuario.perfilusuario.foto and usuario.perfilusuario.foto.url %}
                     <img src="{{ usuario.perfilusuario.foto.url }}" alt="Foto de perfil" class="foto-preview">
                 {% else %}
-                    <p class="foto-placeholder">Sin foto registrada</p>
+                    <img src="{% static 'images/user_placeholder.png' %}" alt="Sin foto" class="foto-preview">
                 {% endif %}
 
                 <div class="file-input-container">

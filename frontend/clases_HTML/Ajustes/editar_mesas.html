@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar mesas - Cuenta Clara</title>
+    <link rel="stylesheet" href="{% static 'clases_CSS/Ajustes/StyleEditarMesa.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Checkbox invisible para controlar el menú -->
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    
+    <!-- Botón hamburguesa -->
+    <label for="menu-toggle" class="menu-button">
+        <i class="fas fa-bars"></i>
+    </label>
+
+    <!-- Menú lateral -->
+    <nav class="sidebar">
+        <ul class="menu-list">
+            <li class="menu-item-first">
+                <button onclick="window.location.href='{% url 'menu' %}'" class="menu-link">
+                    <i class="fas fa-utensils fallback-icon"></i>
+                    <span class="menu-label">Menú</span>
+                </button>
+            </li>
+            <li class="menu-item">
+                <button onclick="window.location.href='{% url 'mesas' %}'" class="menu-link">
+                    <i class="fas fa-chair fallback-icon"></i>
+                    <span class="menu-label">Mesas</span>
+                </button>
+            </li>
+            <li class="menu-item">
+                <button onclick="window.location.href='{% url 'cuentas' %}'" class="menu-link">
+                    <i class="fas fa-receipt fallback-icon"></i>
+                    <span class="menu-label">Cuentas</span>
+                </button>
+            </li>
+            <li class="menu-item">
+                <button onclick="window.location.href='{% url 'corte' %}'" class="menu-link">
+                    <i class="fas fa-cut fallback-icon"></i>
+                    <span class="menu-label">Corte</span>
+                </button>
+            </li>
+            <li class="menu-item">
+                <button onclick="window.location.href='{% url 'ajustes' %}'" class="menu-link">
+                    <i class="fas fa-cog fallback-icon"></i>
+                    <span class="menu-label">Ajustes</span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main class="content">
+        <div class="title-card">
+            <h1>Editar mesas</h1>
+        </div>
+
+        <form class="mesas-form">
+            <div class="mesas-container">
+                {% for mesa in mesas %}
+                <div class="mesa-option" id="mesa-{{ mesa.numero }}">
+                    <div class="mesa-box" style="background-color: {{ mesa.color|default:'#ffffff' }}">
+                        <span class="mesa-numero">Mesa {{ mesa.numero }}</span>
+                        <button type="button" class="eliminar-btn" onclick="eliminarMesa({{ mesa.numero }})">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </form>
+    </main>
+
+    <!-- Panel derecho -->
+    <div class="right-panel">
+        <div class="right-panel-content">
+            <div class="title-card">
+                <h2>Conteo</h2>
+            </div>
+
+            <div class="mesas-list">
+                {% for mesa in mesas %}
+                <div class="mesa-existente" id="mesa-list-{{ mesa.numero }}">
+                    <span class="mesa-numero">Mesa {{ mesa.numero }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="panel-footer">
+                <div class="mesas-actions">
+                    <button class="action-btn" onclick="window.location.href='{% url 'agregar_mesa' %}'">
+                        <i class="fas fa-plus"></i> Agregar nueva mesa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function eliminarMesa(numeroMesa) {
+            if (confirm(`¿Estás seguro de eliminar la Mesa ${numeroMesa}?`)) {
+                fetch(`/ajustes/eliminar_mesa/${numeroMesa}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCSRFToken(),
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById(`mesa-${numeroMesa}`).remove();
+                        const mesaList = document.getElementById(`mesa-list-${numeroMesa}`);
+                        if (mesaList) mesaList.remove();
+                    } else {
+                        alert(data.error || 'Error al eliminar la mesa');
+                    }
+                });
+            }
+        }
+
+        function getCSRFToken() {
+            const name = 'csrftoken';
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                const trimmed = cookie.trim();
+                if (trimmed.startsWith(name + '=')) {
+                    return trimmed.substring(name.length + 1);
+                }
+            }
+            return '';
+        }
+    </script>
+</body>
+</html>

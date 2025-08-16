@@ -1,21 +1,23 @@
-/* Variables CSS para fácil personalización */
 :root {
-    /* Colores */
-    --main-bg: #f5f5f5;
-    --hover-bg: #607B92FF;
+    --primary-color: #043A5B;
+    --secondary-color: #607B92;
+    --success-color: #28a745;
+    --hover-green: #218838;
+    --danger-color: #dc3545;
+    --light-gray: #f5f5f5;
+    --border-color: #e0e3e7;
     --text-color: #2c3e50;
-    --content-bg: #f5f5f5;
-    
-    /* Dimensiones */
-    --sidebar-expanded: 250px;
-    --sidebar-collapsed: 70px;
-    --icon-size: 24px;
-    
-    /* Transiciones */
-    --transition-speed: 0.3s;
+    --white: #ffffff;
+    --sidebar-width: 250px;
+    --sidebar-collapsed: 80px;
+    --right-panel-width: 300px;
+    --spacing-sm: 10px;
+    --spacing-md: 15px;
+    --spacing-lg: 20px;
+    --transition: all 0.3s ease;
+    --icon-size: 28px;
 }
 
-/* Reset básico */
 * {
     margin: 0;
     padding: 0;
@@ -24,135 +26,370 @@
 
 body {
     font-family: 'Cabin', sans-serif;
-    background-color: var(--content-bg);
-    transition: margin-left var(--transition-speed);
+    background-color: var(--light-gray);
     min-height: 100vh;
-    
+    color: var(--text-color);
 }
 
-/* Ocultar checkbox que controla el menú */
-.menu-toggle {
-    display: none;
+/* Sidebar y Menú */
+.menu-toggle { 
+    display: none; 
 }
 
-/* Botón del menú hamburguesa */
 .menu-button {
     position: fixed;
-    top: 20px;
-    left: 10px;
-    font-size: var(--icon-size);
-    cursor: pointer;
+    top: var(--spacing-lg);
+    left: var(--spacing-sm);
+    font-size: 28px;
     z-index: 1000;
-    background: var(--main-bg);
+    background: var(--light-gray);
     color: var(--text-color);
-    padding: 10px;
+    padding: var(--spacing-sm);
     border-radius: 10%;
-    transition: var(--transition-speed);
+    transition: var(--transition);
+    cursor: pointer;
 }
 
 .menu-button:hover {
-    background: var(--hover-bg);
-    
+    background: var(--secondary-color);
+    color: var(--white);
 }
 
-/* Menú lateral */
 .sidebar {
     position: fixed;
     top: 0;
     left: 0;
+    width: var(--sidebar-width);
     height: 100%;
-    width: var(--sidebar-expanded);
-    background-color: var(--main-bg);
-    transition: width var(--transition-speed);
-    padding-top: 80px;
+    background: var(--light-gray);
+    transition: var(--transition);
     z-index: 999;
-    overflow: hidden;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    padding-top: 80px;
 }
 
-/* Estado contraído del menú */
 .menu-toggle:not(:checked) ~ .sidebar {
     width: var(--sidebar-collapsed);
 }
 
-/* Lista de items del menú */
 .menu-list {
-    list-style-type: none;
+    list-style: none;
 }
 
-/* Items individuales del menú */
-
-.menu-item {
-    padding: 18px 20px;
-    transition: var(--transition-speed);
-    white-space: nowrap;
-    margin-bottom: 5px;
-    box-shadow: 0px 5px 4px rgba(0, 0, 0, 0.1);
+.menu-item, 
+.menu-item-first {
+    padding: 0;
+    margin: 0;
 }
 
-.menu-item:hover {
-    background-color: var(--hover-bg);
-}
-
-/* Enlaces del menú */
 .menu-link {
     display: flex;
     align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 18px 25px;
+    background: none;
+    border: none;
     color: var(--text-color);
-    text-decoration: none;
-    font-size: 16px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: left;
+    transition: var(--transition);
+    font-family: inherit;
 }
 
-/* Contenedor de iconos */
-.menu-icon, .fallback-icon {
+.menu-item-first .menu-link {
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1), 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.menu-item .menu-link {
+    box-shadow: 0 5px 4px rgba(0,0,0,0.1);
+}
+
+.menu-link:hover {
+    background-color: var(--secondary-color);
+    color: var(--white);
+}
+
+.menu-icon, 
+.fallback-icon {
     width: var(--icon-size);
     height: var(--icon-size);
-    margin-right: 15px;
+    margin-right: 18px;
     object-fit: contain;
 }
 
-
-
-/* Texto de los items */
 .menu-label {
-    transition: 
-        opacity var(--transition-speed), 
-        visibility var(--transition-speed);
+    transition: opacity var(--transition), visibility var(--transition);
     opacity: 1;
     visibility: visible;
+    white-space: nowrap;
 }
 
-/* Ocultar texto cuando el menú está contraído */
 .menu-toggle:not(:checked) ~ .sidebar .menu-label {
     opacity: 0;
     visibility: hidden;
 }
 
-/* Contenido principal */
+/* Contenido Principal */
 .content {
-    margin-left: var(--sidebar-expanded);
-    padding: 20px;
-    transition: margin-left var(--transition-speed);
+    margin-left: var(--sidebar-width);
+    margin-right: var(--right-panel-width);
+    padding: var(--spacing-lg);
+    transition: var(--transition);
 }
 
-/* Ajustar contenido cuando el menú está contraído */
 .menu-toggle:not(:checked) ~ .content {
     margin-left: var(--sidebar-collapsed);
 }
 
-/* Estilos responsivos */
-@media (max-width: 768px) {
+.title-card {
+    width: 100%;
+    padding: var(--spacing-sm);
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    margin-bottom: 30px;
+    text-align: center;
+}
 
-    
-    /* Oscurecer contenido cuando el menú está abierto */
-    .menu-toggle:checked ~ .content {
-        margin-left: 0;
-        filter: brightness(0.7);
-        pointer-events: none; /* Evitar interacciones con el contenido */
+h1, h2 {
+    color: var(--white);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+}
+
+/* Grid de Mesas */
+.mesas-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--spacing-lg);
+    padding: 0;
+}
+
+.mesa-option {
+    display: block;
+    position: relative;
+    cursor: pointer;
+}
+
+.mesa-input {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+.mesa-box {
+    font-size: 1.5rem;
+    width: 100%;
+    aspect-ratio: 1/0.7;
+    background: var(--white);
+    border: 2px solid var(--border-color);
+    border-radius: 7px;
+    padding: 50px 0;
+    text-align: center;
+    transition: var(--transition);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.mesa-option:hover .mesa-box {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.mesa-input:checked + .mesa-box {
+    background: var(--primary-color);
+    color: var(--white);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(4, 58, 91, 0.3);
+}
+
+/* Panel Derecho */
+.right-panel {
+    width: var(--right-panel-width);
+    background: var(--light-gray);
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    border-left: 1px solid var(--border-color);
+    box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.right-panel-content {
+    padding: var(--spacing-lg) var(--spacing-lg) 80px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.orden-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-sm) 5px;
+    margin-bottom: var(--spacing-md);
+}
+
+.orden-card {
+    background: var(--white);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-left: 4px solid var(--success-color);
+    position: relative;
+    transition: var(--transition);
+}
+
+.orden-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.orden-card h3 {
+    color: var(--success-color);
+    margin-bottom: var(--spacing-sm);
+    font-size: 1.1rem;
+}
+
+.orden-card p {
+    color: #565D6D;
+    padding: 5px 0;
+    border-bottom: 1px dashed var(--border-color);
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.orden-card p:last-child { 
+    border-bottom: none; 
+}
+
+.orden-card.para-llevar {
+    border-left-color: var(--primary-color);
+}
+
+.orden-card.para-llevar h3 {
+    color: var(--primary-color);
+}
+
+.eliminar-btn {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    width: 25px;
+    height: 25px;
+    background: var(--success-color);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.eliminar-btn:hover {
+    background: var(--hover-green);
+    transform: scale(1.1);
+}
+
+/* Footer del Panel */
+.panel-footer {
+    background: var(--light-gray);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: var(--right-panel-width);
+    z-index: 30;
+}
+
+.mesas-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.action-btn {
+    width: 100%;
+    padding: var(--spacing-sm);
+    background: var(--success-color);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.action-btn:hover {
+    background: var(--hover-green);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.action-btn i { 
+    font-size: 1.1rem; 
+}
+
+/* Media Queries */
+@media (max-width: 1024px) {
+    .right-panel, 
+    .panel-footer {
+        width: 280px;
     }
-    
-    /* Asegurar que el botón esté sobre el menú */
-    .menu-button {
-        z-index: 1001;
+}
+
+@media (max-width: 768px) {
+    .content {
+        margin-right: 0;
+    }
+
+    .right-panel {
+        width: 100%;
+        position: relative;
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+        height: auto;
+        max-height: 60vh;
+    }
+
+    .panel-footer {
+        width: 100%;
+        position: sticky;
+        right: auto;
+    }
+
+    .mesas-container {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: var(--spacing-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .right-panel-content {
+        padding: var(--spacing-md) var(--spacing-md) 70px;
+    }
+
+    .panel-footer {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .action-btn {
+        padding: var(--spacing-sm);
+        font-size: 0.9rem;
     }
 }

@@ -1,114 +1,73 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Agregar Platillo - Cuenta Clara</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="..\../clases_CSS/Ajustes/styleEditarPlatillo.css">
-    </head>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Platillo - Cuenta Clara</title>
 
-    <body>
-        <div class="box-card">
-            <div class="title">
-                <h2>Editar el platillo</h2>
-            </div>
-            <div class="card">
-                <label for="platillo-nombre">Datos de platillo: </label>
-                <input type="text" class="card-input" id="platillo-nombre" placeholder="Nombre del Platillo" required>
-                <input type="text" class="card-input" id="platillo-precio" placeholder="Precio del Platillo" required>
-                <p>Edita los ingredientes del platillo:</p>
-            </div>
-        
-            <form>
-            <!-- 
-                Campos del formulario 
-                - El primer campo siempre visible
-                - Los siguientes campos se muestran automáticamente
-                cuando el anterior tiene contenido
-            -->
-            
-            <!-- Campo 1 (siempre visible) -->
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="Ingrediente 1">
-            </div>
-            
-            <!-- Campo 2 -->
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="Ingrediente 2">
-            </div>
-            
-            <!-- Campo 3 -->
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="Ingrediente 3">
-            </div>
-            
-            <!-- Campo 4 -->
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="Ingrediente 4">
-            </div>
-            
-            <!-- Campo 5 -->
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="Ingrediente 5">
-            </div>
+  <!-- Fuente -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
-            <!-- Campo 5 -->
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="Ingrediente 6">
-            </div>
-
-            <!-- Campo 5 -->
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="Ingrediente 7">
-            </div>
-
-            <!-- Campo 5 -->
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="Ingrediente 8">
-            </div>
-
-            <!-- Campo 5 -->
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="Ingrediente 9">
-            </div>
-            
-            
-        <!-- Sección para seleccionar la foto -->
-        <div class="foto-section">
-        <p>Edita la foto del platillo:</p>
-            <div class="file-input-container">
-                <label for="platillo-foto" class="file-input-label">
-                    <span class="file-input-text">Seleccionar archivo</span>
-                    <input type="file" id="platillo-foto" class="file-input" accept="image/*" onchange="document.getElementById('file-name').textContent = this.files[0]?.name || 'No se ha seleccionado ningún archivo'"> <!-- Esta línea es la que nos permite mostrar el nombre del archivo cuando se selecciona -->
-                    <input type="file" id="platillo-foto" class="file-input" accept="image/*">
-                </label>
-                <span class="file-name" id="file-name">No se ha seleccionado ningún archivo</span>
-            </div>
-        </div>
-        
-            <!-- Botón de envío del formulario -->
-            <div class="botones-container">
-                <label for="mostrar-mensaje" roll="button" class="guardar-btn">Guardar</label>  <!-- Checkbox que controla la visibilidad del mensaje de confirmación //copiar-->
-                <a href="editar_menu.html" class="guardar-btn cancelar-btn">Cancelar</a>
-            </div>
-            
-            </form>
-        </div>
-
-        <!-- Checkbox invisible para controlar la visibilidad del mensaje de confirmación -->
-    <input type="checkbox" id="mostrar-mensaje" class="mensaje-checkbox">
-
-    <!-- Mensaje de confirmación que aparece al guardar -->
-    <div class="mensaje-confirmacion">
-        <div class="mensaje-contenido">
-            <p>Datos guardados.</p>
-            <!-- El label actúa como botón OK para cerrar el mensaje -->
-            <a href="##" class="ok-btm">Ok</a>
-        </div>
+  <!-- Estilos -->
+  <link rel="stylesheet" href="{% static 'clases_CSS/Ajustes/styleEditarPlatillo.css' %}">
+</head>
+<body>
+  <div class="box-card">
+    <div class="title">
+      <h2>Editar el platillo</h2>
     </div>
 
-    </body>
+    <form method="POST" enctype="multipart/form-data" class="edit-platillo-form">
+      {% csrf_token %}
+
+      <div class="card">
+        <label for="platillo-nombre">Nombre del Platillo</label>
+        <input type="text" name="nombre" id="platillo-nombre" class="card-input" placeholder="Nombre del Platillo" value="{{ platillo.nombre }}" required>
+
+        <label for="platillo-precio">Precio del Platillo</label>
+        <input type="number" name="precio" id="platillo-precio" class="card-input" placeholder="Precio del Platillo" step="0.01" value="{{ platillo.precio }}" required>
+
+        <p>Edita los ingredientes del platillo:</p>
+
+        {% for ingrediente in ingredientes_list %}
+          <div class="form-group">
+            <input type="text" name="ingredientes[]" class="form-input" placeholder="Ingrediente" value="{{ ingrediente }}">
+          </div>
+        {% endfor %}
+
+        {% for i in campos_vacios %}
+          <div class="form-group">
+            <input type="text" name="ingredientes[]" class="form-input" placeholder="Ingrediente">
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="foto-section">
+        <p>Edita la foto del platillo:</p>
+
+        {% if platillo.foto %}
+          <div class="imagen-actual">
+            <img src="{{ platillo.foto.url }}" alt="Foto actual del platillo" style="max-width: 200px; border-radius: 8px;">
+            <p class="imagen-label">Foto actual</p>
+          </div>
+        {% endif %}
+
+        <label for="platillo-foto" class="file-input-label">
+          <span class="file-input-text">Seleccionar archivo</span>
+          <input type="file" name="foto" id="platillo-foto" class="file-input" accept="image/*"
+            onchange="document.getElementById('file-name').textContent = this.files[0]?.name || 'No se ha seleccionado ningún archivo'">
+        </label>
+        <span class="file-name" id="file-name">No se ha seleccionado ningún archivo</span>
+      </div>
+
+      <div class="botones-container">
+        <button type="submit" class="guardar-btn">Guardar</button>
+        <a href="{% url 'editar_menu' %}" class="guardar-btn cancelar-btn">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</body>
 </html>

@@ -2,69 +2,194 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Menú - Cuenta Clara</title>
-
-    <!-- Fuentes e íconos -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!-- Estilos locales -->
-    <link rel="stylesheet" href="{% static 'clases_CSS/styleMenu.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú - Cuenta Clara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'clases_CSS/styleMenu.css' %}">
 </head>
 <body>
-    <!-- Checkbox invisible para controlar el menú -->
-    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+  <!-- Toggle menú -->
+  <input type="checkbox" id="menu-toggle" class="menu-toggle">
+  <label for="menu-toggle" class="menu-button">
+    <i class="fas fa-bars"></i>
+  </label>
 
-    <!-- Botón hamburguesa -->
-    <label for="menu-toggle" class="menu-button">
-        <i class="fas fa-bars"></i>
-    </label>
+  <!-- Sidebar -->
+  <nav class="sidebar" aria-label="Menú principal">
+    <ul class="menu-list">
+      <li class="menu-item-first">
+        <a href="{% url 'menu' %}" class="menu-link">
+          <i class="fas fa-utensils"></i>
+          <span class="menu-label">Menú</span>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="{% url 'mesas' %}" class="menu-link">
+          <i class="fas fa-chair"></i>
+          <span class="menu-label">Mesas</span>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="{% url 'cuentas' %}" class="menu-link">
+          <i class="fas fa-receipt"></i>
+          <span class="menu-label">Cuentas</span>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="{% url 'corte' %}" class="menu-link">
+          <i class="fas fa-cut"></i>
+          <span class="menu-label">Corte</span>
+        </a>
+      </li>
+      {% if request.user.perfilusuario.role == 'admin' %}
+      <li class="menu-item">
+        <a href="{% url 'ajustes' %}" class="menu-link">
+          <i class="fas fa-cog"></i>
+          <span class="menu-label">Ajustes</span>
+        </a>
+      </li>
+      {% endif %}
+      <li class="menu-item">
+        <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="menu-link logout-btn" onclick="return confirm('¿Seguro que deseas cerrar sesión?')">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="menu-label">Cerrar sesión</span>
+          </button>
+        </form>
+      </li>
+    </ul>
+  </nav>
 
-    <!-- Menú lateral -->
-    <nav class="sidebar">
-        <ul class="menu-list">
-            <li class="menu-item">
-                <a href="{% url 'menu' %}" class="menu-link">
-                    <i class="fas fa-utensils fallback-icon"></i>
-                    <span class="menu-label">Dashboard</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{% url 'mesas' %}" class="menu-link">
-                    <i class="fas fa-chair fallback-icon"></i>
-                    <span class="menu-label">Mesas</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{% url 'cuentas' %}" class="menu-link">
-                    <i class="fas fa-receipt fallback-icon"></i>
-                    <span class="menu-label">Cuentas</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{% url 'corte' %}" class="menu-link">
-                    <i class="fas fa-cut fallback-icon"></i>
-                    <span class="menu-label">Corte</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{% url 'ajustes' %}" class="menu-link">
-                    <i class="fas fa-cog fallback-icon"></i>
-                    <span class="menu-label">Ajustes</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+  <!-- Contenido principal -->
+  <main class="content">
+    <div class="title-card">
+      <h1>Menú</h1>
+    </div>
 
-    <!-- Contenido principal -->
-    <main class="content">
-        <h1>Menú de Comida</h1>
-        <p>Esta sección muestra los platillos disponibles en el restaurante.</p>
-    </main>
+    <form id="form-orden" method="POST" action="{% url 'crear_orden' %}" class="menu-form">
+      {% csrf_token %}
+      <input type="hidden" name="platillos_seleccionados" id="platillos_seleccionados">
+      <input type="hidden" name="mesa" id="mesa-id" value="{{ mesa.id|default:'' }}">
+
+      <div class="menu-container">
+        {% for platillo in platillos %}
+        <label class="platillo-option">
+          <input type="checkbox"
+                 name="platillo"
+                 value="{{ platillo.id }}"
+                 class="platillo-input"
+                 data-nombre="{{ platillo.nombre }}"
+                 data-precio="{{ platillo.precio }}">
+          <div class="platillo-card">
+            {% if platillo.foto %}
+            <div class="platillo-imagen" style="background-image: url('{{ platillo.foto.url }}');"></div>
+            {% endif %}
+            <div class="platillo-info">
+              <span class="platillo-nombre">{{ platillo.nombre }}</span>
+              <span class="platillo-precio">$ {{ platillo.precio }}</span>
+            </div>
+          </div>
+        </label>
+        {% empty %}
+        <p>No hay platillos disponibles en el menú.</p>
+        {% endfor %}
+      </div>
+
+      <!-- Panel derecho -->
+      <div class="right-panel">
+        <div class="right-panel-content">
+          <div class="panel-header">
+            <h2>Pedido Actual</h2>
+          </div>
+          <div class="pedido-container"></div>
+          <div class="panel-footer">
+            <div class="total-container">
+              <div class="total-text">Total:</div>
+              <div class="total-monto">$0.00</div>
+            </div>
+            <div class="botones-container">
+              <button type="submit" class="boton-ordenar">Ordenar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <!-- Script -->
+  <script>
+    const checkboxes = document.querySelectorAll('.platillo-input');
+    const pedidoContainer = document.querySelector('.pedido-container');
+    const totalMonto = document.querySelector('.total-monto');
+    const formOrden = document.getElementById('form-orden');
+    const hiddenInput = document.getElementById('platillos_seleccionados');
+
+    let pedido = [];
+
+    function actualizarPanel() {
+      pedidoContainer.innerHTML = '';
+      let total = 0;
+
+      pedido.forEach((item, index) => {
+        total += item.precio;
+        const div = document.createElement('div');
+        div.className = 'platillo-pedido';
+        div.innerHTML = `
+          <div class="platillo-nombre">${item.nombre}
+            <div class="platillo-precio">• $${item.precio.toFixed(2)}</div>
+          </div>
+          <div class="platillo-acciones">
+            <button class="eliminar-btn" data-index="${index}">×</button>
+          </div>
+        `;
+        pedidoContainer.appendChild(div);
+      });
+
+      totalMonto.textContent = `$${total.toFixed(2)}`;
+    }
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        const nombre = checkbox.dataset.nombre;
+        const precio = parseFloat(checkbox.dataset.precio);
+
+        if (checkbox.checked) {
+          pedido.push({ nombre, precio, id: parseInt(checkbox.value) });
+        } else {
+          pedido = pedido.filter(p => p.nombre !== nombre);
+        }
+
+        actualizarPanel();
+      });
+    });
+
+    pedidoContainer.addEventListener('click', e => {
+      if (e.target.classList.contains('eliminar-btn')) {
+        const index = parseInt(e.target.dataset.index);
+        const nombre = pedido[index].nombre;
+        pedido.splice(index, 1);
+        checkboxes.forEach(cb => {
+          if (cb.dataset.nombre === nombre) cb.checked = false;
+        });
+        actualizarPanel();
+      }
+    });
+
+    formOrden.addEventListener('submit', e => {
+      if (pedido.length === 0) {
+        e.preventDefault();
+        alert("Selecciona al menos un platillo para ordenar.");
+        return;
+      }
+
+      const ids = pedido.map(p => p.id);
+      hiddenInput.value = JSON.stringify(ids);
+    });
+  </script>
 </body>
 </html>

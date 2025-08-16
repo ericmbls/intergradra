@@ -2,36 +2,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- Metadatos y fuentes -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Platillo - Cuenta Clara</title>
 
-    <!-- Fuente principal -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
-    <!-- Hoja de estilos principal -->
     <link rel="stylesheet" href="{% static 'clases_CSS/Ajustes/styleEditarMenu.css' %}">
-
-    <!-- Fuente de iconos de respaldo -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
-    <!-- Checkbox invisible para controlar el menú lateral -->
     <input type="checkbox" id="menu-toggle" class="menu-toggle">
-
-    <!-- Botón hamburguesa -->
     <label for="menu-toggle" class="menu-button">
         <i class="fas fa-bars"></i>
     </label>
 
-    <!-- Menú lateral -->
     <nav class="sidebar">
         <ul class="menu-list">
-            <li class="menu-item"><a href="{% url 'menu' %}" class="menu-link"><i class="fas fa-utensils fallback-icon"></i><span class="menu-label">Menú</span></a></li>
+            <li class="menu-item"><a href="{% url 'menu_comida' %}" class="menu-link"><i class="fas fa-utensils fallback-icon"></i><span class="menu-label">Menú</span></a></li>
             <li class="menu-item"><a href="{% url 'mesas' %}" class="menu-link"><i class="fas fa-chair fallback-icon"></i><span class="menu-label">Mesas</span></a></li>
             <li class="menu-item"><a href="{% url 'cuentas' %}" class="menu-link"><i class="fas fa-receipt fallback-icon"></i><span class="menu-label">Cuentas</span></a></li>
             <li class="menu-item"><a href="{% url 'corte' %}" class="menu-link"><i class="fas fa-cut fallback-icon"></i><span class="menu-label">Corte</span></a></li>
@@ -39,16 +30,13 @@
         </ul>
     </nav>
 
-    <!-- Contenido principal -->
     <main class="content">
         <div class="title-card">
             <h1>Editar menú</h1>
         </div>
 
-        <!-- Botón convertido en enlace Django -->
         <a class="add-item-btn floating-btn" href="{% url 'agregar_platillo' %}">Agregar platillo</a>
 
-        <!-- Tabla de platillos -->
         <div class="table">
             <div class="table-container">
                 <table class="menu-table">
@@ -58,56 +46,34 @@
                             <th>Ingredientes</th>
                             <th>Precio</th>
                             <th>Editar</th>
-                            <th>Activo</th>
+                            <th>Eliminar</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Ejemplo de datos -->
+                        {% for platillo in platillos %}
                         <tr>
-                            <td>Chilaquiles verdes</td>
+                            <td>{{ platillo.nombre }}</td>
                             <td>
                                 <ul class="ingredients-list">
-                                    <li>Cebolla</li>
-                                    <li>Crema</li>
-                                    <li>Queso fresco</li>
-                                    <li>Salsa verde</li>
-                                    <li>Tortillas</li>
+                                    {% for ingrediente in platillo.ingredientes_list %}
+                                        <li>{{ ingrediente }}</li>
+                                    {% endfor %}
                                 </ul>
                             </td>
-                            <td>$50.00</td>
-                            <td><a href="{% url 'editar_platillo' %}" class="edit-btn">Editar</a></td>
-                            <td><input type="checkbox" class="active-checkbox" checked></td>
-                        </tr>
-                        <tr>
-                            <td>Torta de milanesa</td>
+                            <td>${{ platillo.precio }}</td>
                             <td>
-                                <ul class="ingredients-list">
-                                    <li>Milanesa de pollo</li>
-                                    <li>Aguacate</li>
-                                    <li>Mayonesa</li>
-                                    <li>Jitomate</li>
-                                    <li>Pan telera</li>
-                                </ul>
+                                <a href="{% url 'editar_platillo' platillo.id %}" class="edit-btn">Editar</a>
                             </td>
-                            <td>$45.00</td>
-                            <td><a href="{% url 'editar_platillo' %}" class="edit-btn">Editar</a></td>
-                            <td><input type="checkbox" class="active-checkbox" checked></td>
-                        </tr>
-                        <tr>
-                            <td>Hamburguesa clásica</td>
                             <td>
-                                <ul class="ingredients-list">
-                                    <li>Carne de res</li>
-                                    <li>Queso amarillo</li>
-                                    <li>Lechuga</li>
-                                    <li>Jitomate</li>
-                                    <li>Pan para hamburguesa</li>
-                                </ul>
+                                <form action="{% url 'eliminar_platillo' platillo.id %}" method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este platillo?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="delete-btn">
+                                        <i class="fas fa-trash-alt"></i> Eliminar
+                                    </button>
+                                </form>
                             </td>
-                            <td>$60.00</td>
-                            <td><a href="{% url 'editar_platillo' %}" class="edit-btn">Editar</a></td>
-                            <td><input type="checkbox" class="active-checkbox" checked></td>
                         </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>

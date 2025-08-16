@@ -56,12 +56,13 @@ class RegistroUsuarioForm(UserCreationForm):
         }
 
     def save(self, commit=True):
-        user = super().save(commit=commit)
-        role = self.cleaned_data['role']
-        foto = self.cleaned_data.get('foto')
+        user = super().save(commit=False)
+        if commit:
+            user.save()
 
-        perfil, created = PerfilUsuario.objects.get_or_create(user=user)
-        perfil.role = role
+        perfil, _ = PerfilUsuario.objects.get_or_create(user=user)
+        perfil.role = self.cleaned_data['role']
+        foto = self.cleaned_data.get('foto')
         if foto:
             perfil.foto = foto
         perfil.save()
@@ -149,11 +150,13 @@ class EditarUsuarioForm(forms.ModelForm):
                 self.fields['role'].initial = perfil.role
 
     def save(self, commit=True):
-        user = super().save(commit=commit)
+        user = super().save(commit=False)
 
         password = self.cleaned_data.get('password')
         if password:
             user.set_password(password)
+
+        if commit:
             user.save()
 
         perfil, _ = PerfilUsuario.objects.get_or_create(user=user)
