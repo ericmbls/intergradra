@@ -388,3 +388,33 @@ h1, h2 {
     margin-bottom: 15px;
     border-radius: 5px;
 }
+
+.export-button {
+  background-color: #1d6f42;
+  color: white;
+  margin-top: 1em;
+  padding: 0.6em 1.2em;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.export-button i {
+  margin-right: 0.5em;
+}
+
+.export-button {
+  background-color: #1d6f42;
+  color: white;
+  margin-top: 1em;
+  padding: 0.6em 1.2em;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.export-button i {
+  margin-right: 0.5em;
+}

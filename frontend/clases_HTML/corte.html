@@ -2,117 +2,98 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Fuentes e íconos -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corte - Cuenta Clara</title>
 
-    <!-- Estilos -->
-    <link rel="stylesheet" href="{% static 'clases_CSS/styleCorte.css' %}">
+  <!-- Fuentes e íconos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <title>Corte - Cuenta Clara</title>
+  <!-- Estilos -->
+  <link rel="stylesheet" href="{% static 'clases_CSS/styleCorte.css' %}">
 </head>
 <body>
-    <input type="checkbox" id="menu-toggle" class="menu-toggle">
-    <label for="menu-toggle" class="menu-button">
-        <i class="fas fa-bars"></i>
-    </label>
+  <!-- Botón de menú -->
+  <input type="checkbox" id="menu-toggle" class="menu-toggle">
+  <label for="menu-toggle" class="menu-button">
+    <i class="fas fa-bars"></i>
+  </label>
 
-    <!-- Menú lateral -->
-    <nav class="sidebar">
-        <ul class="menu-list">
-            <li class="menu-item-first">
-                <a href="{% url 'menu_comida' %}" class="menu-link">
-                    <i class="fas fa-utensils"></i><span class="menu-label">Menú</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{% url 'mesas' %}" class="menu-link">
-                    <i class="fas fa-chair"></i><span class="menu-label">Mesas</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{% url 'cuentas' %}" class="menu-link">
-                    <i class="fas fa-receipt"></i><span class="menu-label">Cuentas</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{% url 'corte' %}" class="menu-link active">
-                    <i class="fas fa-cut"></i><span class="menu-label">Corte</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{% url 'ajustes' %}" class="menu-link">
-                    <i class="fas fa-cog"></i><span class="menu-label">Ajustes</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+  <!-- Menú lateral -->
+  <nav class="sidebar">
+    <ul class="menu-list">
+      <li class="menu-item-first"><a href="{% url 'menu_comida' %}" class="menu-link"><i class="fas fa-utensils"></i><span class="menu-label">Menú</span></a></li>
+      <li class="menu-item"><a href="{% url 'mesas' %}" class="menu-link"><i class="fas fa-chair"></i><span class="menu-label">Mesas</span></a></li>
+      <li class="menu-item"><a href="{% url 'cuentas' %}" class="menu-link"><i class="fas fa-receipt"></i><span class="menu-label">Cuentas</span></a></li>
+      <li class="menu-item"><a href="{% url 'corte' %}" class="menu-link active"><i class="fas fa-cut"></i><span class="menu-label">Corte</span></a></li>
+      <li class="menu-item"><a href="{% url 'ajustes' %}" class="menu-link"><i class="fas fa-cog"></i><span class="menu-label">Ajustes</span></a></li>
+    </ul>
+  </nav>
 
-    <main class="content">
-        <div class="title-card">
-            <h1>Corte de caja</h1>
+  <!-- Contenido principal -->
+  <main class="content">
+    <section class="title-card">
+      <h1>Corte de caja</h1>
+    </section>
+
+    {% if mensaje %}
+    <div class="alerta-exito">{{ mensaje }}</div>
+    {% endif %}
+
+    <!-- Selector de fecha -->
+    <form method="POST">
+      {% csrf_token %}
+      <label for="fecha" class="calendario-p">Elegir otro día de corte:</label>
+      <input type="date" name="fecha" id="fecha" class="calendario" value="{{ fecha|date:'Y-m-d' }}">
+      <button type="submit" class="action-button">Buscar</button>
+    </form>
+
+    <!-- Datos del corte -->
+    <section class="datos-corte">
+      <div class="card-info">Entradas de efectivo: <strong>${{ ventas_totales }}</strong></div>
+      <div class="card-info">Gastos en materia: <strong>${{ gastos_totales }}</strong></div>
+      <div class="card-info">Dinero en caja: <strong>${{ dinero_en_caja }}</strong></div>
+
+      <!-- Botón exportar -->
+      <form method="GET" action="{% url 'exportar_corte_excel' %}">
+        <input type="hidden" name="fecha" value="{{ fecha|date:'Y-m-d' }}">
+        <button type="submit" class="action-button export-button">
+          <i class="fas fa-file-excel"></i> Exportar a Excel
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Panel derecho -->
+  <aside class="right-panel">
+    <div class="right-panel-content">
+      <section class="title-card">
+        <h2>Acciones</h2>
+      </section>
+
+      <!-- Formulario de pago extra -->
+      <form method="POST" class="pagos-form">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="monto-extra">Monto extra:</label>
+          <input type="number" min="1" id="monto-extra" name="monto_extra" class="form-input">
         </div>
+        <button type="submit" name="pagos_extra" class="action-button pagos-button">Agregar pago extra</button>
+      </form>
 
-        {% if mensaje %}
-        <div class="alerta-exito">{{ mensaje }}</div>
-        {% endif %}
-
-        <!-- Selector de fecha -->
-        <form method="POST">
-            {% csrf_token %}
-            <label for="fecha" class="calendario-p">Elegir otro día de corte:</label>
-            <input type="date" name="fecha" id="fecha" class="calendario" value="{{ fecha|date:'Y-m-d' }}">
-            <button type="submit" class="action-button">Buscar</button>
-        </form>
-
-        <!-- Datos del corte -->
-        <div class="card-info">
-            Entradas de efectivo: <strong>${{ ventas_totales }}</strong>
+      <!-- Formulario de corte -->
+      <form method="POST" class="corte-form">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="efectivo-inicial">Efectivo inicial:</label>
+          <input type="number" min="1" id="efectivo-inicial" name="efectivo_inicial" class="form-input" required>
         </div>
-        <div class="card-info">
-            Gastos en materia: <strong>${{ gastos_totales }}</strong>
-        </div>
-        <div class="card-info">
-            Dinero en caja: <strong>${{ dinero_en_caja }}</strong>
-        </div>
-    </main>
-
-    <!-- Panel derecho -->
-    <div class="right-panel">
-        <div class="right-panel-content">
-            <div class="title-card">
-                <h2>Ventas totales</h2>
-            </div>
-
-            <!-- Formulario de pago extra -->
-            <form method="POST" class="pagos-form">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="monto-extra">Monto extra:</label>
-                    <input type="number" min="1" id="monto-extra" name="monto_extra" class="form-input">
-                </div>
-                <button type="submit" name="pagos_extra" class="action-button pagos-button">
-                    Agregar pago extra
-                </button>
-            </form>
-
-            <!-- Formulario de corte -->
-            <form method="POST" class="corte-form">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="efectivo-inicial">Efectivo inicial:</label>
-                    <input type="number" min="1" id="efectivo-inicial" name="efectivo_inicial" class="form-input" required>
-                </div>
-                <button type="submit" name="calcular_corte" class="action-button corte-button">
-                    Calcular corte
-                </button>
-            </form>
-        </div>
+        <button type="submit" name="calcular_corte" class="action-button corte-button">Calcular corte</button>
+      </form>
     </div>
+  </aside>
 </body>
 </html>

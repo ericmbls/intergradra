@@ -1,23 +1,43 @@
-from functools import wraps
+# 🔧 Utilidades estándar
 import json
+import logging
 from decimal import Decimal, InvalidOperation
 from datetime import datetime
+from functools import wraps
 
+# 📦 Librerías externas
+import openpyxl
+
+# 🌐 Django - HTTP y vistas
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseBadRequest, JsonResponse
-from django.utils import timezone
-from django.contrib import messages
+
+# 🔐 Django - Autenticación
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LogoutView
 
-from .models import Platillo, PerfilUsuario, Mesa, Cuenta, Orden, GastoExtra, CorteCaja
+# 🧠 Django - Utilidades
+from django.utils import timezone
+from django.db.models import Sum
+from django.contrib import messages
+
+# 🗂️ Modelos y formularios locales
+from .models import (
+    Platillo,
+    PerfilUsuario,
+    Mesa,
+    Cuenta,
+    Orden,
+    GastoExtra,
+    CorteCaja
+)
 from .forms import RegistroUsuarioForm, EditarUsuarioForm
 
-import logging
+# 📝 Logger
 logger = logging.getLogger(__name__)
 
 # -------------------------
@@ -386,59 +406,133 @@ def eliminar_mesa(request, numero):
 # -------------------------
 # Corte de caja
 # -------------------------
-@login_required
 def vista_corte(request):
-    fecha_raw = request.POST.get('fecha') or timezone.localdate()
-    try:
-        fecha = datetime.strptime(fecha_raw, "%Y-%m-%d").date() if isinstance(fecha_raw, str) else fecha_raw
-    except ValueError:
-        fecha = timezone.localdate()
+    # Obtener fecha desde POST o usar la actual
+    fecha_str = request.POST.get("fecha")
+    fecha = timezone.now().date()
+    if fecha_str:
+        try:
+            fecha = timezone.datetime.strptime(fecha_str, "%Y-%m-%d").date()
+        except ValueError:
+            pass  # Si la fecha es inválida, se mantiene la actual
 
+    # Datos base del corte
     cuentas_cerradas = Cuenta.objects.filter(cerrada__date=fecha)
-    ventas_totales = sum(c.total for c in cuentas_cerradas)
-    gastos_totales = sum(g.monto for g in GastoExtra.objects.filter(fecha=fecha))
+    ventas_totales = cuentas_cerradas.aggregate(total=Sum('total'))['total'] or 0
 
-    efectivo_inicial = Decimal(request.POST.get('efectivo_inicial', '0') or '0')
-    monto_extra = Decimal(request.POST.get('monto_extra', '0') or '0')
-    dinero_en_caja = efectivo_inicial + ventas_totales - gastos_totales + monto_extra
+    gastos = GastoExtra.objects.filter(fecha=fecha)
+    gastos_totales = gastos.aggregate(total=Sum('monto'))['total'] or 0
 
-    if request.method == 'POST':
-        if 'pagos_extra' in request.POST and monto_extra > 0:
-            GastoExtra.objects.create(
-                fecha=fecha,
-                monto=monto_extra,
-                descripcion="Pago extra",
-                creado_por=request.user
-            )
-            request.session['mensaje'] = "Pago extra agregado."
-            return redirect('corte')
+    corte_existente = CorteCaja.objects.filter(fecha=fecha).first()
+    monto_extra = corte_existente.monto_extra if corte_existente else 0
+    dinero_en_caja = (
+        corte_existente.dinero_en_caja if corte_existente
+        else ventas_totales - gastos_totales + monto_extra
+    )
 
-        elif 'calcular_corte' in request.POST:
-            CorteCaja.objects.update_or_create(
-                fecha=fecha,
-                defaults={
-                    'efectivo_inicial': efectivo_inicial,
-                    'ventas_totales': ventas_totales,
-                    'gastos_totales': gastos_totales,
-                    'monto_extra': monto_extra,
-                    'dinero_en_caja': dinero_en_caja,
-                    'creado_por': request.user
-                }
-            )
-            request.session['mensaje'] = "Corte calculado y guardado."
-            return redirect('corte')
+    mensaje = ""
 
-    contexto = {
-        'fecha': fecha,
-        'ventas_totales': ventas_totales,
-        'gastos_totales': gastos_totales,
-        'dinero_en_caja': dinero_en_caja,
-        'mensaje': request.session.pop('mensaje', None)
+    # Agregar monto extra
+    if request.method == "POST" and "pagos_extra" in request.POST:
+        try:
+            monto_extra = Decimal(request.POST.get("monto_extra", "0"))
+            mensaje = "Monto extra agregado correctamente."
+        except (InvalidOperation, TypeError):
+            monto_extra = 0
+            mensaje = "Monto extra inválido."
+
+    # Calcular corte
+    if request.method == "POST" and "calcular_corte" in request.POST:
+        try:
+            efectivo_inicial = Decimal(request.POST.get("efectivo_inicial", "0"))
+        except (InvalidOperation, TypeError):
+            efectivo_inicial = 0
+
+        dinero_en_caja = efectivo_inicial + ventas_totales - gastos_totales + monto_extra
+
+        CorteCaja.objects.update_or_create(
+            fecha=fecha,
+            defaults={
+                "efectivo_inicial": efectivo_inicial,
+                "ventas_totales": ventas_totales,
+                "gastos_totales": gastos_totales,
+                "monto_extra": monto_extra,
+                "dinero_en_caja": dinero_en_caja,
+                "creado_por": request.user
+            }
+        )
+        mensaje = "Corte de caja guardado correctamente."
+
+    context = {
+        "fecha": fecha,
+        "ventas_totales": ventas_totales,
+        "gastos_totales": gastos_totales,
+        "monto_extra": monto_extra,
+        "dinero_en_caja": dinero_en_caja,
+        "mensaje": mensaje,
     }
-    return render(request, 'corte.html', contexto)
+    return render(request, "corte.html", context)
+
 
 def eliminar_cuenta(request, cuenta_id):
     cuenta = get_object_or_404(Cuenta, id=cuenta_id)
     cuenta.delete()
     messages.success(request, "Cuenta eliminada correctamente.")
     return redirect('cuentas')
+
+
+def exportar_corte_excel(request):
+    fecha_str = request.GET.get("fecha")
+    fecha = timezone.now().date()
+    if fecha_str:
+        fecha = timezone.datetime.strptime(fecha_str, "%Y-%m-%d").date()
+
+    corte = CorteCaja.objects.filter(fecha=fecha).first()
+    gastos = GastoExtra.objects.filter(fecha=fecha)
+    cuentas = Cuenta.objects.filter(cerrada__date=fecha)
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Corte de Caja"
+
+    # Encabezados
+    ws.append(["Fecha", "Efectivo Inicial", "Ventas Totales", "Gastos Totales", "Monto Extra", "Dinero en Caja"])
+    if corte:
+        ws.append([
+            corte.fecha.strftime("%d/%m/%Y"),
+            float(corte.efectivo_inicial),
+            float(corte.ventas_totales),
+            float(corte.gastos_totales),
+            float(corte.monto_extra),
+            float(corte.dinero_en_caja)
+        ])
+    else:
+        ws.append([fecha.strftime("%d/%m/%Y"), "", "", "", "", ""])
+
+    # Detalle de gastos
+    ws_gastos = wb.create_sheet(title="Gastos")
+    ws_gastos.append(["Fecha", "Descripción", "Monto"])
+    for gasto in gastos:
+        ws_gastos.append([
+            gasto.fecha.strftime("%d/%m/%Y"),
+            gasto.descripcion,
+            float(gasto.monto)
+        ])
+
+    # Detalle de cuentas
+    ws_cuentas = wb.create_sheet(title="Cuentas Cerradas")
+    ws_cuentas.append(["Mesa", "Total", "Fecha de cierre"])
+    for cuenta in cuentas:
+        mesa = cuenta.mesa.numero if cuenta.mesa else "Para llevar"
+        ws_cuentas.append([
+            mesa,
+            float(cuenta.total),
+            cuenta.cerrada.strftime("%d/%m/%Y %H:%M")
+        ])
+
+    # Respuesta HTTP
+    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    filename = f"Corte_{fecha.strftime('%Y%m%d')}.xlsx"
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+    wb.save(response)
+    return response
