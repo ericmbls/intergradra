@@ -31,30 +31,48 @@
 
     <nav class="sidebar" aria-label="Menú principal">
         <ul class="menu-list">
-            <li class="menu-item">
-                <button onclick="window.location.href='{% url 'menu_comida' %}'" class="menu-link">
-                    <i class="fas fa-utensils"></i> <span class="menu-label">Menú</span>
-                </button>
+            <li class="menu-item-first">
+                <a href="{% url 'menu_comida' %}" class="menu-link">
+                    <i class="fas fa-utensils fallback-icon"></i>
+                    <span class="menu-label">Menú</span>
+                </a>
             </li>
             <li class="menu-item">
-                <button onclick="window.location.href='{% url 'mesas' %}'" class="menu-link">
-                    <i class="fas fa-chair"></i> <span class="menu-label">Mesas</span>
-                </button>
+                <a href="{% url 'mesas' %}" class="menu-link">
+                    <i class="fas fa-chair fallback-icon"></i>
+                    <span class="menu-label">Mesas</span>
+                </a>
             </li>
             <li class="menu-item">
-                <button onclick="window.location.href='{% url 'cuentas' %}'" class="menu-link">
-                    <i class="fas fa-receipt"></i> <span class="menu-label">Cuentas</span>
-                </button>
+                <a href="{% url 'cuentas' %}" class="menu-link">
+                    <i class="fas fa-receipt fallback-icon"></i>
+                    <span class="menu-label">Cuentas</span>
+                </a>
             </li>
             <li class="menu-item">
-                <button onclick="window.location.href='{% url 'corte' %}'" class="menu-link">
-                    <i class="fas fa-cut"></i> <span class="menu-label">Corte</span>
-                </button>
+                <a href="{% url 'corte' %}" class="menu-link">
+                    <i class="fas fa-cut fallback-icon"></i>
+                    <span class="menu-label">Corte</span>
+                </a>
             </li>
+
+            {% if request.user.perfilusuario.role == 'admin' %}
             <li class="menu-item">
-                <button onclick="window.location.href='{% url 'ajustes' %}'" class="menu-link">
-                    <i class="fas fa-cog"></i> <span class="menu-label">Ajustes</span>
-                </button>
+                <a href="{% url 'ajustes' %}" class="menu-link">
+                    <i class="fas fa-cog fallback-icon"></i>
+                    <span class="menu-label">Ajustes</span>
+                </a>
+            </li>
+            {% endif %}
+
+            <li class="menu-item">
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="menu-link logout-btn" onclick="return confirm('¿Seguro que deseas cerrar sesión?')">
+                        <i class="fas fa-sign-out-alt fallback-icon"></i>
+                        <span class="menu-label">Cerrar sesión</span>
+                    </button>
+                </form>
             </li>
         </ul>
     </nav>

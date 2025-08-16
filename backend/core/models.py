@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # 🍽️ Platillo del menú
 class Platillo(models.Model):
@@ -69,6 +70,7 @@ class Cuenta(models.Model):
     total = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     activa = models.BooleanField(default=True)
     creada = models.DateTimeField(auto_now_add=True)
+    cerrada = models.DateTimeField(null=True, blank=True)  # Agregado para corte
 
     def __str__(self):
         mesa_info = f"Mesa {self.mesa.numero}" if self.mesa else "Para llevar"
@@ -81,7 +83,8 @@ class Cuenta(models.Model):
     def cerrar(self):
         self.calcular_total()
         self.activa = False
-        self.save(update_fields=['activa', 'total'])
+        self.cerrada = timezone.now()
+        self.save(update_fields=['activa', 'total', 'cerrada'])
 
     class Meta:
         verbose_name = "Cuenta"
@@ -116,3 +119,38 @@ class Orden(models.Model):
         verbose_name = "Orden"
         verbose_name_plural = "Órdenes"
         ordering = ['-creada']
+
+
+# 💸 Gasto extra del día
+class GastoExtra(models.Model):
+    fecha = models.DateField()
+    monto = models.DecimalField(max_digits=10, decimal_places=2)
+    descripcion = models.CharField(max_length=255)
+    creado_por = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return f"{self.fecha} — ${self.monto:.2f} — {self.descripcion}"
+
+    class Meta:
+        verbose_name = "Gasto Extra"
+        verbose_name_plural = "Gastos Extras"
+        ordering = ['-fecha']
+
+
+# 📊 Corte de caja diario
+class CorteCaja(models.Model):
+    fecha = models.DateField(unique=True)
+    efectivo_inicial = models.DecimalField(max_digits=10, decimal_places=2)
+    ventas_totales = models.DecimalField(max_digits=10, decimal_places=2)
+    gastos_totales = models.DecimalField(max_digits=10, decimal_places=2)
+    monto_extra = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    dinero_en_caja = models.DecimalField(max_digits=10, decimal_places=2)
+    creado_por = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return f"Corte {self.fecha} — ${self.dinero_en_caja:.2f}"
+
+    class Meta:
+        verbose_name = "Corte de Caja"
+        verbose_name_plural = "Cortes de Caja"
+        ordering = ['-fecha']

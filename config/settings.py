@@ -1,28 +1,21 @@
 from pathlib import Path
 
-# 🏁 Base del proyecto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# 🔐 Seguridad
-SECRET_KEY = 'django-insecure-5bglcp)j6a&+*v!kfe-l_ns3y0m88p3e)b0_2==rsm^#-2$x&%'  # ⚠️ No usar en producción
+SECRET_KEY = 'django-insecure-5bglcp)j6a&+*v!kfe-l_ns3y0m88p3e)b0_2==rsm^#-2$x&%'
 DEBUG = True
 ALLOWED_HOSTS = []
 
-# 📦 Aplicaciones instaladas
 INSTALLED_APPS = [
-    # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Apps locales
     'backend.core',
 ]
 
-# 🧱 Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -32,10 +25,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
-# 🌐 Configuración de URLs
 ROOT_URLCONF = 'config.urls'
 
-# 🧩 Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -52,10 +43,8 @@ TEMPLATES = [
     },
 ]
 
-# 🔥 WSGI
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# 🗃️ Base de datos
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -63,27 +52,21 @@ DATABASES = {
     }
 }
 
-# 🌍 Internacionalización
 LANGUAGE_CODE = 'es-mx'
 TIME_ZONE = 'America/Mexico_City'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# 📁 Archivos estáticos
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'frontend' / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # útil para producción
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# 🗂️ Archivos multimedia
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# 🔁 Redirecciones post-login/logout
 LOGIN_REDIRECT_URL = 'menu'
 LOGOUT_REDIRECT_URL = 'login'
-
-# 🧠 Campo automático por defecto
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 LOGIN_URL = '/login/'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -55,19 +55,26 @@ class RegistroUsuarioForm(UserCreationForm):
             }),
         }
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Este correo ya está registrado.")
+        return email
+
     def save(self, commit=True):
         user = super().save(commit=False)
         if commit:
             user.save()
 
         perfil, _ = PerfilUsuario.objects.get_or_create(user=user)
-        perfil.role = self.cleaned_data['role']
+        perfil.role = self.cleaned_data.get('role', 'employee')
         foto = self.cleaned_data.get('foto')
         if foto:
             perfil.foto = foto
         perfil.save()
 
         return user
+
 
 # ✏️ Edición de usuario
 class EditarUsuarioForm(forms.ModelForm):
@@ -160,7 +167,7 @@ class EditarUsuarioForm(forms.ModelForm):
             user.save()
 
         perfil, _ = PerfilUsuario.objects.get_or_create(user=user)
-        perfil.role = self.cleaned_data['role']
+        perfil.role = self.cleaned_data.get('role', 'employee')
         foto = self.cleaned_data.get('foto')
         if foto:
             perfil.foto = foto

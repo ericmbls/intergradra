@@ -12,7 +12,7 @@ from .views import (
     mesas,
     cuentas_view,
     cerrar_cuenta,
-    corte,
+    vista_corte,  # ✅ nombre corregido
     ajustes,
 
     # 🧾 Pedidos
@@ -60,7 +60,7 @@ urlpatterns = [
     path('mesas/', mesas, name='mesas'),
     path('cuentas/', cuentas_view, name='cuentas'),
     path('cuentas/cerrar/<int:cuenta_id>/', cerrar_cuenta, name='cerrar_cuenta'),
-    path('corte/', corte, name='corte'),
+    path('corte/', vista_corte, name='corte'),  # ✅ corregido
     path('ajustes/', ajustes, name='ajustes'),
 
     # 🧾 Pedidos
