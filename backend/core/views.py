@@ -388,36 +388,29 @@ def eliminar_mesa(request, numero):
 # -------------------------
 @login_required
 def vista_corte(request):
-    # 🗓️ Obtener fecha seleccionada o usar la actual
     fecha_raw = request.POST.get('fecha') or timezone.localdate()
     try:
         fecha = datetime.strptime(fecha_raw, "%Y-%m-%d").date() if isinstance(fecha_raw, str) else fecha_raw
     except ValueError:
         fecha = timezone.localdate()
 
-    # 💳 Cuentas cerradas en esa fecha
     cuentas_cerradas = Cuenta.objects.filter(cerrada__date=fecha)
     ventas_totales = sum(c.total for c in cuentas_cerradas)
+    gastos_totales = sum(g.monto for g in GastoExtra.objects.filter(fecha=fecha))
 
-    # 💸 Gastos registrados
-    gastos = GastoExtra.objects.filter(fecha=fecha)
-    gastos_totales = sum(g.monto for g in gastos)
-
-    # 🧾 Valores del formulario
     efectivo_inicial = Decimal(request.POST.get('efectivo_inicial', '0') or '0')
     monto_extra = Decimal(request.POST.get('monto_extra', '0') or '0')
     dinero_en_caja = efectivo_inicial + ventas_totales - gastos_totales + monto_extra
 
-    # 🧠 Procesamiento de formularios
     if request.method == 'POST':
-        if 'pagos_extra' in request.POST:
-            if monto_extra > 0:
-                GastoExtra.objects.create(
-                    fecha=fecha,
-                    monto=monto_extra,
-                    descripcion="Pago extra",
-                    creado_por=request.user
-                )
+        if 'pagos_extra' in request.POST and monto_extra > 0:
+            GastoExtra.objects.create(
+                fecha=fecha,
+                monto=monto_extra,
+                descripcion="Pago extra",
+                creado_por=request.user
+            )
+            request.session['mensaje'] = "Pago extra agregado."
             return redirect('corte')
 
         elif 'calcular_corte' in request.POST:
@@ -432,13 +425,20 @@ def vista_corte(request):
                     'creado_por': request.user
                 }
             )
+            request.session['mensaje'] = "Corte calculado y guardado."
             return redirect('corte')
 
-    # 📦 Contexto para la plantilla
-    context = {
+    contexto = {
         'fecha': fecha,
         'ventas_totales': ventas_totales,
         'gastos_totales': gastos_totales,
-        'dinero_en_caja': dinero_en_caja
+        'dinero_en_caja': dinero_en_caja,
+        'mensaje': request.session.pop('mensaje', None)
     }
-    return render(request, 'corte.html', context)
+    return render(request, 'corte.html', contexto)
+
+def eliminar_cuenta(request, cuenta_id):
+    cuenta = get_object_or_404(Cuenta, id=cuenta_id)
+    cuenta.delete()
+    messages.success(request, "Cuenta eliminada correctamente.")
+    return redirect('cuentas')

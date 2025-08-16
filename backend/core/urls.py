@@ -1,5 +1,6 @@
 from django.urls import path
 from django.views.generic import TemplateView
+from . import views
 from .views import (
     # 🔐 Autenticación
     login_view,
@@ -67,6 +68,7 @@ urlpatterns = [
     path('procesar_pedido/', procesar_pedido, name='procesar_pedido'),
     path('ajax/actualizar_pedido/', actualizar_pedido, name='actualizar_pedido'),
     path('crear_orden/', crear_orden, name='crear_orden'),
+    path('cuentas/eliminar/<int:cuenta_id>/', views.eliminar_cuenta, name='eliminar_cuenta'),
 
     # ⚙️ Ajustes generales
     path('ajustes/editar_menu/', editar_menu, name='editar_menu'),

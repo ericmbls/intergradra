@@ -18,7 +18,6 @@
 </head>
 <body>
     <input type="checkbox" id="menu-toggle" class="menu-toggle">
-    
     <label for="menu-toggle" class="menu-button">
         <i class="fas fa-bars"></i>
     </label>
@@ -28,32 +27,27 @@
         <ul class="menu-list">
             <li class="menu-item-first">
                 <a href="{% url 'menu_comida' %}" class="menu-link">
-                    <i class="fas fa-utensils fallback-icon"></i>
-                    <span class="menu-label">Menú</span>
+                    <i class="fas fa-utensils"></i><span class="menu-label">Menú</span>
                 </a>
             </li>
             <li class="menu-item">
                 <a href="{% url 'mesas' %}" class="menu-link">
-                    <i class="fas fa-chair fallback-icon"></i>
-                    <span class="menu-label">Mesas</span>
+                    <i class="fas fa-chair"></i><span class="menu-label">Mesas</span>
                 </a>
             </li>
             <li class="menu-item">
                 <a href="{% url 'cuentas' %}" class="menu-link">
-                    <i class="fas fa-receipt fallback-icon"></i>
-                    <span class="menu-label">Cuentas</span>
+                    <i class="fas fa-receipt"></i><span class="menu-label">Cuentas</span>
                 </a>
             </li>
             <li class="menu-item">
-                <a href="{% url 'corte' %}" class="menu-link">
-                    <i class="fas fa-cut fallback-icon"></i>
-                    <span class="menu-label">Corte</span>
+                <a href="{% url 'corte' %}" class="menu-link active">
+                    <i class="fas fa-cut"></i><span class="menu-label">Corte</span>
                 </a>
             </li>
             <li class="menu-item">
                 <a href="{% url 'ajustes' %}" class="menu-link">
-                    <i class="fas fa-cog fallback-icon"></i>
-                    <span class="menu-label">Ajustes</span>
+                    <i class="fas fa-cog"></i><span class="menu-label">Ajustes</span>
                 </a>
             </li>
         </ul>
@@ -64,16 +58,20 @@
             <h1>Corte de caja</h1>
         </div>
 
+        {% if mensaje %}
+        <div class="alerta-exito">{{ mensaje }}</div>
+        {% endif %}
+
         <!-- Selector de fecha -->
         <form method="POST">
             {% csrf_token %}
             <label for="fecha" class="calendario-p">Elegir otro día de corte:</label>
-            <input type="date" name="fecha" id="fecha" class="calendario" value="{{ fecha }}">
+            <input type="date" name="fecha" id="fecha" class="calendario" value="{{ fecha|date:'Y-m-d' }}">
             <button type="submit" class="action-button">Buscar</button>
         </form>
 
         <!-- Datos del corte -->
-        <div class="card-info"> 
+        <div class="card-info">
             Entradas de efectivo: <strong>${{ ventas_totales }}</strong>
         </div>
         <div class="card-info">

@@ -381,3 +381,10 @@ h1, h2 {
         --sidebar-collapsed: 70px;
     }
 }
+.alerta-exito {
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}

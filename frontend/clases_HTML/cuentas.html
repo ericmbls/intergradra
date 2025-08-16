@@ -5,13 +5,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cuentas - Cuenta Clara</title>
+
+  <!-- Fuentes y estilos -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'clases_CSS/styleCuentas.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+  <!-- Botón de menú -->
   <input type="checkbox" id="menu-toggle" class="menu-toggle">
   <label for="menu-toggle" class="menu-button">
     <i class="fas fa-bars"></i>
@@ -20,44 +23,18 @@
   <!-- Menú lateral -->
   <nav class="sidebar" aria-label="Menú principal">
     <ul class="menu-list">
-      <li class="menu-item-first">
-        <a href="{% url 'menu_comida' %}" class="menu-link">
-          <i class="fas fa-utensils fallback-icon"></i>
-          <span class="menu-label">Menú</span>
-        </a>
-      </li>
-      <li class="menu-item">
-        <a href="{% url 'mesas' %}" class="menu-link">
-          <i class="fas fa-chair fallback-icon"></i>
-          <span class="menu-label">Mesas</span>
-        </a>
-      </li>
-      <li class="menu-item">
-        <a href="{% url 'cuentas' %}" class="menu-link">
-          <i class="fas fa-receipt fallback-icon"></i>
-          <span class="menu-label">Cuentas</span>
-        </a>
-      </li>
-      <li class="menu-item">
-        <a href="{% url 'corte' %}" class="menu-link">
-          <i class="fas fa-cut fallback-icon"></i>
-          <span class="menu-label">Corte</span>
-        </a>
-      </li>
+      <li class="menu-item-first"><a href="{% url 'menu_comida' %}" class="menu-link"><i class="fas fa-utensils"></i><span class="menu-label">Menú</span></a></li>
+      <li class="menu-item"><a href="{% url 'mesas' %}" class="menu-link"><i class="fas fa-chair"></i><span class="menu-label">Mesas</span></a></li>
+      <li class="menu-item"><a href="{% url 'cuentas' %}" class="menu-link"><i class="fas fa-receipt"></i><span class="menu-label">Cuentas</span></a></li>
+      <li class="menu-item"><a href="{% url 'corte' %}" class="menu-link"><i class="fas fa-cut"></i><span class="menu-label">Corte</span></a></li>
       {% if request.user.perfilusuario.role == 'admin' %}
-      <li class="menu-item">
-        <a href="{% url 'ajustes' %}" class="menu-link">
-          <i class="fas fa-cog fallback-icon"></i>
-          <span class="menu-label">Ajustes</span>
-        </a>
-      </li>
+      <li class="menu-item"><a href="{% url 'ajustes' %}" class="menu-link"><i class="fas fa-cog"></i><span class="menu-label">Ajustes</span></a></li>
       {% endif %}
       <li class="menu-item">
-        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+        <form action="{% url 'logout' %}" method="post" class="logout-form">
           {% csrf_token %}
           <button type="submit" class="menu-link logout-btn" onclick="return confirm('¿Seguro que deseas cerrar sesión?')">
-            <i class="fas fa-sign-out-alt fallback-icon"></i>
-            <span class="menu-label">Cerrar sesión</span>
+            <i class="fas fa-sign-out-alt"></i><span class="menu-label">Cerrar sesión</span>
           </button>
         </form>
       </li>
@@ -66,9 +43,9 @@
 
   <!-- Contenido principal -->
   <main class="content">
-    <div class="title-card">
+    <section class="title-card">
       <h1>Cuentas</h1>
-    </div>
+    </section>
 
     <!-- Filtros -->
     <form method="GET" class="filtros-container">
@@ -76,59 +53,67 @@
         <label for="filtro-mesa">Mesa:</label>
         <input type="number" id="filtro-mesa" name="mesa" min="1" placeholder="No. mesa" class="filtro-input" value="{{ request.GET.mesa }}">
       </div>
-
       <div class="filtro-group">
         <label for="filtro-fecha">Fecha:</label>
         <input type="date" id="filtro-fecha" name="fecha" class="filtro-input" value="{{ request.GET.fecha }}">
       </div>
-
       <button type="submit" class="filtro-btn">Buscar</button>
       <a href="{% url 'cuentas' %}" class="filtro-btn reset-btn">Limpiar</a>
     </form>
 
     <!-- Tabla de cuentas -->
-    <div class="table-container">
+    <section class="table-container">
       <table class="menu-table">
         <thead>
           <tr>
             <th>Mesa</th>
             <th>Orden</th>
-            <th>Pagó</th>
+            <th>Platillos</th>
             <th>Monto</th>
-            <th>Fecha</th>
+            <th>Fecha Orden</th>
+            <th>Pagó</th>
+            <th>Total Cuenta</th>
+            <th>Fecha Cuenta</th>
           </tr>
         </thead>
         <tbody>
           {% for cuenta in cuentas %}
-          <tr>
-            <td>{{ cuenta.mesa.numero }}</td>
-            <td>
-              <ul class="ingredients-list">
-                {% for orden in cuenta.ordenes.all %}
+            {% for orden in cuenta.ordenes.all %}
+            <tr>
+              {% if forloop.first %}
+                <td rowspan="{{ cuenta.ordenes.count }}">{{ cuenta.mesa.numero }}</td>
+              {% endif %}
+              <td>Orden #{{ orden.id }}</td>
+              <td>
+                <ul class="platillos-lista">
                   {% for platillo in orden.platillos.all %}
                     <li>{{ platillo.nombre }}</li>
+                  {% empty %}
+                    <li><em>Sin platillos</em></li>
                   {% endfor %}
-                {% endfor %}
-              </ul>
-            </td>
-            <td>
-              {% if not cuenta.activa %}
-                Sí
-              {% else %}
-                No
+                </ul>
+              </td>
+              <td>${{ orden.total }}</td>
+              <td>{{ orden.creada|date:"d/m/Y H:i" }}</td>
+              {% if forloop.first %}
+                <td rowspan="{{ cuenta.ordenes.count }}">{{ cuenta.activa|yesno:"No,Sí" }}</td>
+                <td rowspan="{{ cuenta.ordenes.count }}">${{ cuenta.total }}</td>
+                <td rowspan="{{ cuenta.ordenes.count }}">{{ cuenta.creada|date:"d/m/Y" }}</td>
               {% endif %}
-            </td>
-            <td>${{ cuenta.total }}</td>
-            <td>{{ cuenta.creada|date:"d/m/Y" }}</td>
-          </tr>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="8"><em>Sin órdenes registradas.</em></td>
+            </tr>
+            {% endfor %}
           {% empty %}
           <tr>
-            <td colspan="5">No hay cuentas registradas.</td>
+            <td colspan="8"><em>No hay cuentas registradas.</em></td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
-    </div>
+    </section>
   </main>
 </body>
 </html>

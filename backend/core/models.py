@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.models import Sum
 
 # 🍽️ Platillo del menú
 class Platillo(models.Model):
@@ -70,14 +71,14 @@ class Cuenta(models.Model):
     total = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     activa = models.BooleanField(default=True)
     creada = models.DateTimeField(auto_now_add=True)
-    cerrada = models.DateTimeField(null=True, blank=True)  # Agregado para corte
+    cerrada = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         mesa_info = f"Mesa {self.mesa.numero}" if self.mesa else "Para llevar"
         return f"Cuenta #{self.id} — {mesa_info} — ${self.total:.2f}"
 
     def calcular_total(self):
-        self.total = sum(p.precio for p in self.platillos.all())
+        self.total = self.platillos.aggregate(total=Sum('precio'))['total'] or 0
         self.save(update_fields=['total'])
 
     def cerrar(self):
@@ -112,8 +113,9 @@ class Orden(models.Model):
     def __str__(self):
         return f"Orden #{self.id} — Cuenta #{self.cuenta.id} — {self.get_estado_display()}"
 
+    @property
     def total(self):
-        return sum(p.precio for p in self.platillos.all())
+        return self.platillos.aggregate(total=Sum('precio'))['total'] or 0
 
     class Meta:
         verbose_name = "Orden"
